@@ -4,8 +4,8 @@
 
 Ten open-weight language models (0.6 to 14 billion parameters, from Alibaba, Meta, Mistral, Google and Microsoft) took seven classic behavioral-finance experiments: the framing effect, loss aversion, anchoring, the sunk-cost fallacy, the disposition effect, mental accounting and the certainty effect. That came to 31,500 independent decisions (31,494 usable), plus 8,100 in an exploratory variant, all run locally on one consumer GPU for $0 in API fees.
 
-- **Interactive site:** take the same tests and see which model decides most like you (`site/`)
-- **Paper:** `paper/paper.pdf`
+- **Interactive site:** https://tails-you-lose.vercel.app: take the same tests and see which model decides most like you (source in `site/`)
+- **Paper:** [`paper/paper.pdf`](paper/paper.pdf)
 - **Raw data:** every trial, with the model's raw output, in `data/trials.jsonl`
 
 ## Key findings
