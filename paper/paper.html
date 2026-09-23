@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tails, You Lose · Yerushalmi 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Schibsted+Grotesk:wght@400;500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="paper.css">
+</head>
+<body>
+
+<p class="kicker">Working paper · September 2026 · Behavioral finance × artificial intelligence</p>
+<h1>Tails, You Lose</h1>
+<p class="subtitle">Do open-weight language models inherit human biases in financial decisions? Evidence from 10,414 decisions across seven classic experiments</p>
+<p class="byline">Daniel Yerushalmi</p>
+<p class="meta">Woodbury, New York · Code, data and interactive version: github.com/danielyerushalmi/tails-you-lose · </p>
+
+<div class="abstract">
+  <p class="kicker">Abstract</p>
+  <p>(pending)</p>
+</div>
+
+<h2><span class="num">1</span>Introduction</h2>
+<p>Businesses are starting to hand financial decisions to language models. Banks pilot AI assistants that answer questions about accounts and investments, fintech apps add "AI advisors", and companies build agents that approve purchases, negotiate prices and rebalance portfolios. The pitch is often implicit: a machine is not swayed by emotion, so it should decide more rationally than a person.</p>
+<p>Behavioral economics gives a precise way to test that pitch. Over five decades, psychologists and economists documented a set of systematic, predictable departures from rational choice: people treat identical options differently depending on whether they are described as gains or losses (<em>framing</em>), weigh losses about twice as heavily as equal gains (<em>loss aversion</em>), let irrelevant numbers pull their estimates (<em>anchoring</em>), keep funding failing projects because of money already spent (<em>the sunk-cost fallacy</em>), sell winning investments too early while holding losers (<em>the disposition effect</em>), treat money differently depending on which mental budget it came from (<em>mental accounting</em>), and overvalue certainty (<em>the certainty effect</em>). Language models learn from enormous amounts of human-written text. A natural question is whether they learned our biases along with our language.</p>
+<p>This paper asks three questions that matter to anyone deploying a model for financial decisions:</p>
+<ol>
+  <li><b>Do open-weight models show the classic biases, and how strongly compared with people?</b></li>
+  <li><b>Is apparent rationality real, or memorized?</b> The classic experiments are among the most-discussed problems in psychology, so a model may simply recognize the "Asian disease problem" and recite the textbook-correct answer. We test each bias twice: in its famous wording and in a new financial scenario with the same structure.</li>
+  <li><b>Do cheap interventions help?</b> We test two that a business could deploy tomorrow: asking the model to reason before answering, and giving it a "disciplined, CFA-certified financial advisor" persona.</li>
+</ol>
+<p>The study runs entirely on ten open-weight models on a single consumer graphics card, at zero API cost, so every result can be reproduced by anyone with the same hardware. That includes a size ladder of five models from one family (Qwen3, 0.6 to 14 billion parameters), which lets us ask whether rationality simply improves with scale.</p>
+
+<h2><span class="num">2</span>Related work</h2>
+<p>Horton (2023) proposed treating language models as simulated economic agents, "<i>homo silicus</i>", and showed that GPT-3 qualitatively reproduces several classic behavioral-economics results. Binz and Schulz (2023) put GPT-3 through a battery of cognitive-psychology tasks and found human-like performance on many vignette tasks, along with fragility to small changes in wording. Hagendorff, Fabi and Kosinski (2023) reported that intuitive, human-like reasoning errors grew as GPT-3 models scaled up, then largely disappeared in ChatGPT-era models. Chen et al. (2023) found GPT's budget decisions to be highly consistent with utility maximization, often more consistent than human subjects, although they were sensitive to framing. Suri et al. (2024) documented anchoring, framing and endowment effects in GPT-3.5. Macmillan-Scott and Musolesi (2024) found that models are irrational in ways that often differ from human error patterns and are notably inconsistent across repeated trials. Closest to this study, Ross, Kim and Lo (2024) used utility theory to measure loss aversion and related biases in LLMs and concluded that current models are "neither entirely human-like nor entirely economicus-like". Hu and Zhao (2026) built a finance-domain benchmark showing that models tend to follow biased analyst opinions.</p>
+<p>Two methodological lines also shape this design. Models prefer particular answer positions or letters regardless of content (Pezeshkpour and Hruschka, 2024; Zheng et al., 2024), which is why option order is randomized on every trial here. And because the classic vignettes are widely reproduced online, we pair each one with a structurally identical new financial version. This design is meant to separate reasoning from recall.</p>
+<p>This study adds (a) a single protocol covering seven biases central to behavioral finance, (b) a within-family scaling ladder on open weights, (c) the textbook-versus-new-wording contamination test, (d) two deployable interventions, and (e) a normalized, human-anchored score, the bias quotient, that makes different biases comparable.</p>
+
+<h2><span class="num">3</span>Method</h2>
+<h3>3.1 Models</h3>
+<table><thead><tr><th>Model</th><th>Developer</th><th>Parameters</th><th>Ollama tag</th></tr></thead><tbody><tr><td>Qwen3 0.6B</td><td>Alibaba</td><td class='n'>0.6B</td><td class='mono'>qwen3:0.6b</td></tr><tr><td>Qwen3 1.7B</td><td>Alibaba</td><td class='n'>1.7B</td><td class='mono'>qwen3:1.7b</td></tr><tr><td>Qwen3 4B</td><td>Alibaba</td><td class='n'>4B</td><td class='mono'>qwen3:4b</td></tr><tr><td>Qwen3 8B</td><td>Alibaba</td><td class='n'>8B</td><td class='mono'>qwen3:8b</td></tr></tbody></table><p class='small'>Table 1. The ten models. Qwen3 0.6B to 14B form the within-family size ladder.</p>
+<p>All models ran locally through Ollama 0.33.3 on an NVIDIA RTX 5080 (16 GB), with default 4-bit quantization. Answers were forced into valid JSON with Ollama's schema-constrained decoding: the model must return one of the listed option letters (or a number, for estimates). Qwen3's hidden "thinking" mode was turned off so that every model faced the same format, and reasoning was elicited explicitly instead (Section 3.3). Sampling temperature was 0.8 with a fixed, per-trial seed, so every trial can be regenerated exactly.</p>
+
+<h3>3.2 Experiments</h3>
+<p>Each experiment reproduces the structure of a classic human study (Table 2). In every case, a perfectly consistent decision-maker would show no difference between conditions. For each experiment we wrote two <em>surfaces</em>: the <b>textbook</b> wording (the original or a close paraphrase of it) and a <b>new financial</b> scenario with the same payoffs and structure. For example, the "Asian disease" framing problem becomes a $600 million pension fund facing a credit crisis, with hedging plans that save $200 million for sure or save everything with probability 1/3. Every prompt appears in Appendix A.</p>
+<table><thead><tr><th>Bias</th><th>Task</th><th>Bias measure (0 = consistent)</th><th>Human</th></tr></thead><tbody><tr><td>Framing</td><td>Sure vs. risky plan; outcomes described as gains or as losses</td><td>P(sure | gain) − P(sure | loss)</td><td class='n'>72% − 22% = 0.50</td></tr><tr><td>Loss aversion</td><td>50/50 bet: lose $100 or win $X, X from $50 to $600</td><td>λ − 1, λ = X*/$100</td><td class='n'>λ = 2.25</td></tr><tr><td>Anchoring</td><td>Estimate after a random anchor (low or high)</td><td>anchoring index</td><td class='n'>0.49</td></tr><tr><td>Sunk cost</td><td>Spend the last budget on a doomed project, with or without prior spending</td><td>P(invest | sunk) − P(invest | none)</td><td class='n'>85% − 17% = 0.68</td></tr><tr><td>Disposition</td><td>Must sell one of two equally promising stocks, one up 30%, one down 30%</td><td>P(sell winner) − 0.5</td><td class='n'>≈ 60% (Odean 1998)</td></tr><tr><td>Mental accounting</td><td>Rebuy after losing the ticket vs. losing the same amount of cash</td><td>P(buy | cash) − P(buy | ticket)</td><td class='n'>88% − 46% = 0.42</td></tr><tr><td>Certainty</td><td>$3,000 sure vs. 80% × $4,000, and both chances divided by 4</td><td>P(safe | certain) − P(safe | scaled)</td><td class='n'>80% − 35% = 0.45</td></tr></tbody></table><p class='small'>Table 2. Experiments, measures and human reference values.</p>
+
+<h3>3.3 Design</h3>
+<p>The design is between-subjects, like the human studies: every trial is a fresh conversation in which the model sees exactly one version of one problem, and nothing carries over between trials. A system prompt describes a decision-making study and asks for "the choice you yourself would make". Answer options are shuffled and relabeled A/B on every trial. Each model ran in two answering modes: <b>fast</b>, which returns only the answer, and <b>thinks first</b>, where the JSON schema requires a written "reasoning" field before the answer. On the new financial wording, each model also answered in fast mode under an <b>advisor persona</b> ("an experienced, CFA-certified financial advisor known for disciplined, rational decisions"). Each cell (model × experiment × condition × surface × mode × persona) contains 30 trials, for 10,414 trials in total. A trial whose answer could not be parsed (for example, reasoning that ran past the token limit) was re-run with a larger limit; 36 trials remained unusable and were excluded.</p>
+
+<h3>3.4 Measures</h3>
+<p>Each bias is measured as the gap a consistent agent would not show: the difference in choice shares between the two framings (framing, sunk cost, mental accounting, certainty), the share of forced sales that sell the winner minus 50% (disposition), the anchoring index of Jacowitz and Kahneman (1995), i.e. the gap between median estimates after high and low anchors divided by the gap between the anchors, and for loss aversion the coefficient <i>λ</i> = X*/$100, where X* is the win size at which a fitted logistic curve crosses 50% acceptance of a coin flip that loses $100. For loss aversion the bias is <i>λ</i> − 1.</p>
+<p>To compare biases measured in different units, we divide each model's bias by the human bias on the same measure, which gives the <b>bias quotient (BQ)</b>. BQ = 0 means no bias; BQ = 1 means exactly as biased as the people in the original study; negative values mean the model is biased in the <i>opposite</i> direction from people, which is also a departure from consistency. A model's overall score is its mean absolute BQ across the seven experiments. Human reference values (Table 2) come from the original publications: framing 72% vs 22% sure choices (Tversky and Kahneman, 1981); <i>λ</i> = 2.25 (Tversky and Kahneman, 1992); anchoring index 0.49 (Jacowitz and Kahneman, 1995); sunk cost 85% vs 17% (Arkes and Blumer, 1985); mental accounting 88% vs 46% (Tversky and Kahneman, 1981); certainty 80% vs 35% (Kahneman and Tversky, 1979); and for the disposition effect a 60% winner-sale share, implied by Odean's (1998) proportions of gains and losses realized (0.148 vs 0.098). Uncertainty is reported as 95% bootstrap intervals (1,000 resamples; 200 for the fitted <i>λ</i>), binary contrasts are tested with Fisher's exact test, and comparisons across models use the Wilcoxon signed-rank test.</p>
+
+<h2>Results</h2><p>(pending)</p>
+
+<h2><span class="num">6</span>Limitations</h2>
+<ul>
+  <li><b>Small, quantized, open models.</b> The largest model has 14 billion parameters. Frontier chat models are far larger and more heavily tuned, and prior work suggests some biases shrink with that tuning (Hagendorff et al., 2023). These results describe the kind of model a company can run privately and cheaply, not the frontier.</li>
+  <li><b>Human baselines use different wording.</b> The human numbers come from the textbook versions, often decades old and mostly from university students. The new financial versions have no human data of their own, so BQ on the new wording compares a model's effect on new wording with the human effect on old wording.</li>
+  <li><b>Thirty trials per cell.</b> Intervals on individual cells are wide (roughly ±25 percentage points on a difference of two proportions). Conclusions in this paper rest on patterns across many cells and models, not on single cells.</li>
+  <li><b>A model is not one person.</b> Sampling at temperature 0.8 makes each trial a draw from the model's answer distribution, which we treat like a population of respondents. A model answering deterministically would look more "decisive" without being more rational.</li>
+  <li><b>Prompt sensitivity.</b> One wording per surface cannot rule out that other paraphrases behave differently; the loss-aversion wording change reported in Section 4.6 shows how large such effects can be.</li>
+</ul>
+
+<h2><span class="num">7</span>Conclusion</h2>
+<p>(pending)</p>
+
+<h2>Acknowledgments and AI disclosure</h2>
+<p class="small">This project was built with extensive assistance from an AI system (Anthropic's Claude), which wrote much of the experiment code, statistical analysis, figures and interactive site under the author's direction. All raw model outputs, prompts and analysis code are public so that every number can be checked.</p>
+
+<h2>References</h2>
+<div class="refs">
+<p>Arkes, H. R., &amp; Blumer, C. (1985). The psychology of sunk cost. <i>Organizational Behavior and Human Decision Processes, 35</i>(1), 124–140.</p>
+<p>Binz, M., &amp; Schulz, E. (2023). Using cognitive psychology to understand GPT-3. <i>Proceedings of the National Academy of Sciences, 120</i>(6), e2218523120.</p>
+<p>Chen, Y., Liu, T. X., Shan, Y., &amp; Zhong, S. (2023). The emergence of economic rationality of GPT. <i>Proceedings of the National Academy of Sciences, 120</i>(51), e2316205120.</p>
+<p>Hagendorff, T., Fabi, S., &amp; Kosinski, M. (2023). Human-like intuitive behavior and reasoning biases emerged in large language models but disappeared in ChatGPT. <i>Nature Computational Science, 3</i>, 833–838.</p>
+<p>Horton, J. J. (2023). Large language models as simulated economic agents: What can we learn from homo silicus? NBER Working Paper 31122.</p>
+<p>Hu, X., &amp; Zhao, J. (2026). Fin-Bias: Comprehensive evaluation for LLM decision-making under human bias in finance domain. arXiv:2605.09106.</p>
+<p>Jacowitz, K. E., &amp; Kahneman, D. (1995). Measures of anchoring in estimation tasks. <i>Personality and Social Psychology Bulletin, 21</i>(11), 1161–1166.</p>
+<p>Kahneman, D. (2011). <i>Thinking, fast and slow</i>. Farrar, Straus and Giroux.</p>
+<p>Kahneman, D., &amp; Tversky, A. (1979). Prospect theory: An analysis of decision under risk. <i>Econometrica, 47</i>(2), 263–291.</p>
+<p>Macmillan-Scott, O., &amp; Musolesi, M. (2024). (Ir)rationality and cognitive biases in large language models. <i>Royal Society Open Science, 11</i>(6), 240255.</p>
+<p>Odean, T. (1998). Are investors reluctant to realize their losses? <i>The Journal of Finance, 53</i>(5), 1775–1798.</p>
+<p>Pezeshkpour, P., &amp; Hruschka, E. (2024). Large language models sensitivity to the order of options in multiple-choice questions. <i>Findings of NAACL 2024</i>. arXiv:2308.11483.</p>
+<p>Ross, J., Kim, Y., &amp; Lo, A. W. (2024). LLM economicus? Mapping the behavioral biases of LLMs via utility theory. <i>Conference on Language Modeling (COLM)</i>. arXiv:2408.02784.</p>
+<p>Shefrin, H., &amp; Statman, M. (1985). The disposition to sell winners too early and ride losers too long: Theory and evidence. <i>The Journal of Finance, 40</i>(3), 777–790.</p>
+<p>Suri, G., Slater, L. R., Ziaee, A., &amp; Nguyen, M. (2024). Do large language models show decision heuristics similar to humans? A case study using GPT-3.5. <i>Journal of Experimental Psychology: General, 153</i>(4), 1066–1075.</p>
+<p>Tversky, A., &amp; Kahneman, D. (1974). Judgment under uncertainty: Heuristics and biases. <i>Science, 185</i>(4157), 1124–1131.</p>
+<p>Tversky, A., &amp; Kahneman, D. (1981). The framing of decisions and the psychology of choice. <i>Science, 211</i>(4481), 453–458.</p>
+<p>Tversky, A., &amp; Kahneman, D. (1992). Advances in prospect theory: Cumulative representation of uncertainty. <i>Journal of Risk and Uncertainty, 5</i>(4), 297–323.</p>
+<p>Zheng, C., Zhou, H., Meng, F., Zhou, J., &amp; Huang, M. (2024). Large language models are not robust multiple choice selectors. <i>International Conference on Learning Representations (ICLR)</i>. arXiv:2309.03882.</p>
+</div>
+
+<div class="pagebreak"></div>
+<h2>Appendix A · Every prompt</h2>
+<p class='small'>System prompt (no persona):</p><div class='prompt'>You are taking part in a decision-making study. Read the scenario and answer with the choice you yourself would make. There are no right or wrong answers. Respond only in the requested JSON format.</div>
+<p class='small'>System prompt (advisor persona):</p><div class='prompt'>You are an experienced, CFA-certified financial advisor known for disciplined, rational decisions. You are taking part in a decision-making study. Read the scenario and answer with the choice you yourself would make. Respond only in the requested JSON format.</div>
+<p class='small'>User prompts below are shown in fast mode, with one example option order. In thinks-first mode, the last line instead asks the model to reason briefly in a "reasoning" field before answering. The loss-aversion prompts are shown for X = $150; X ran over $50, 100, 125, 150, 200, 250, 300, 400 and 600.</p>
+<p class='small'><b>Framing effect</b> · condition <span class='mono'>gain</span> · textbook wording</p><div class='prompt'>Imagine that the U.S. is preparing for the outbreak of an unusual Asian disease, which is expected to kill 600 people. Two alternative programs to combat the disease have been proposed. Assume that the exact scientific estimates of the consequences of the programs are as follows:
+
+Option A: If this program is adopted, 200 people will be saved.
+Option B: If this program is adopted, there is a 1/3 probability that 600 people will be saved, and a 2/3 probability that no people will be saved.
+
+Which of the two programs would you favor?
+
+Answer immediately. Reply as JSON with field &quot;choice&quot; where choice is one of A, B.</div>
+<p class='small'><b>Framing effect</b> · condition <span class='mono'>loss</span> · textbook wording</p><div class='prompt'>Imagine that the U.S. is preparing for the outbreak of an unusual Asian disease, which is expected to kill 600 people. Two alternative programs to combat the disease have been proposed. Assume that the exact scientific estimates of the consequences of the programs are as follows:
+
+Option A: If this program is adopted, there is a 1/3 probability that nobody will die, and a 2/3 probability that 600 people will die.
+Option B: If this program is adopted, 400 people will die.
+
+Which of the two programs would you favor?
+
+Answer immediately. Reply as JSON with field &quot;choice&quot; where choice is one of A, B.</div>
+<p class='small'><b>Framing effect</b> · condition <span class='mono'>gain</span> · new financial wording</p><div class='prompt'>You manage a $600 million employee pension fund. A sudden credit-market crisis is expected to wipe out the entire $600 million. Your risk team has designed two emergency hedging plans. Assume the exact estimates of the consequences of the plans are as follows:
+
+Option A: If this plan is adopted, $200 million of the fund will be saved.
+Option B: If this plan is adopted, there is a 1/3 probability that the full $600 million will be saved, and a 2/3 probability that nothing will be saved.
+
+Which of the two plans would you choose?
+
+Answer immediately. Reply as JSON with field &quot;choice&quot; where choice is one of A, B.</div>
+<p class='small'><b>Framing effect</b> · condition <span class='mono'>loss</span> · new financial wording</p><div class='prompt'>You manage a $600 million employee pension fund. A sudden credit-market crisis is expected to wipe out the entire $600 million. Your risk team has designed two emergency hedging plans. Assume the exact estimates of the consequences of the plans are as follows:
+
+Option A: If this plan is adopted, $400 million of the fund will be lost.
+Option B: If this plan is adopted, there is a 1/3 probability that nothing will be lost, and a 2/3 probability that the full $600 million will be lost.
+
+Which of the two plans would you choose?
+
+Answer immediately. Reply as JSON with field &quot;choice&quot; where choice is one of A, B.</div>
+<p class='small'><b>Loss aversion</b> · condition <span class='mono'>x150</span> · textbook wording</p><div class='prompt'>You are offered a gamble on the toss of a fair coin. If the coin shows tails, you lose $100. If the coin shows heads, you win $150. Would you accept this gamble?
+
+Option A: Accept
+Option B: Decline
+
+Answer immediately. Reply as JSON with field &quot;choice&quot; where choice is one of A, B.</div>
+<p class='small'><b>Loss aversion</b> · condition <span class='mono'>x150</span> · new financial wording</p><div class='prompt'>A friend is raising money for a small business and offers you a one-time deal. You put in $100. There is a 50% chance the business fails and you lose your $100, and a 50% chance it succeeds and you get your $100 back plus $150 in profit. Nothing else about your finances changes either way. Would you take the deal?
+
+Option A: Accept
+Option B: Decline
+
+Answer immediately. Reply as JSON with field &quot;choice&quot; where choice is one of A, B.</div>
+<p class='small'><b>Anchoring</b> · condition <span class='mono'>none</span> · textbook wording</p><div class='prompt'>What is your best estimate of the percentage of African countries in the United Nations?
+
+Answer immediately. Reply as JSON with fields &quot;estimate&quot;.</div>
+<p class='small'><b>Anchoring</b> · condition <span class='mono'>low</span> · textbook wording</p><div class='prompt'>A wheel of fortune with numbers from 0 to 100 was just spun in front of you and landed on 10. Is the percentage of African countries in the United Nations higher or lower than 10%? What is your best estimate of the percentage of African countries in the United Nations?
+
+Answer immediately. Reply as JSON with fields &quot;higher_or_lower&quot;, &quot;estimate&quot;.</div>
+<p class='small'><b>Anchoring</b> · condition <span class='mono'>high</span> · textbook wording</p><div class='prompt'>A wheel of fortune with numbers from 0 to 100 was just spun in front of you and landed on 65. Is the percentage of African countries in the United Nations higher or lower than 65%? What is your best estimate of the percentage of African countries in the United Nations?
+
+Answer immediately. Reply as JSON with fields &quot;higher_or_lower&quot;, &quot;estimate&quot;.</div>
+<p class='small'><b>Anchoring</b> · condition <span class='mono'>none</span> · new financial wording</p><div class='prompt'>Harlow Precision Tools is a mid-sized, profitable U.S. manufacturer of industrial cutting tools. Last year it earned $2.40 per share. Comparable companies trade at between 12 and 25 times earnings. Its growth outlook is modest and steady. What is your best estimate of the fair value of one Harlow share, in dollars?
+
+Answer immediately. Reply as JSON with fields &quot;estimate&quot;.</div>
+<p class='small'><b>Anchoring</b> · condition <span class='mono'>low</span> · new financial wording</p><div class='prompt'>Harlow Precision Tools is a mid-sized, profitable U.S. manufacturer of industrial cutting tools. Last year it earned $2.40 per share. Comparable companies trade at between 12 and 25 times earnings. Its growth outlook is modest and steady. Before you answer, a random number generator produced the number 10. Is the fair value of one Harlow share higher or lower than $10? What is your best estimate of the fair value of one Harlow share, in dollars?
+
+Answer immediately. Reply as JSON with fields &quot;higher_or_lower&quot;, &quot;estimate&quot;.</div>
+<p class='small'><b>Anchoring</b> · condition <span class='mono'>high</span> · new financial wording</p><div class='prompt'>Harlow Precision Tools is a mid-sized, profitable U.S. manufacturer of industrial cutting tools. Last year it earned $2.40 per share. Comparable companies trade at between 12 and 25 times earnings. Its growth outlook is modest and steady. Before you answer, a random number generator produced the number 150. Is the fair value of one Harlow share higher or lower than $150? What is your best estimate of the fair value of one Harlow share, in dollars?
+
+Answer immediately. Reply as JSON with fields &quot;higher_or_lower&quot;, &quot;estimate&quot;.</div>
+<p class='small'><b>Sunk-cost fallacy</b> · condition <span class='mono'>sunk</span> · textbook wording</p><div class='prompt'>As the president of an airline company, you have invested 10 million dollars of the company&#x27;s money into a research project. The purpose was to build a plane that would not be detected by conventional radar, in other words, a radar-blank plane. When the project is 90% completed, another firm begins marketing a plane that cannot be detected by radar. Also, it is apparent that their plane is much faster and far more economical than the plane your company is building. The question is: should you invest the last 1 million dollars of your research funds to finish your radar-blank plane?
+
+Option A: Yes, spend the money
+Option B: No, do not spend the money
+
+Answer immediately. Reply as JSON with field &quot;choice&quot; where choice is one of A, B.</div>
+<p class='small'><b>Sunk-cost fallacy</b> · condition <span class='mono'>control</span> · textbook wording</p><div class='prompt'>As president of an airline company, you have received a suggestion from one of your employees. The suggestion is to use the last 1 million dollars of your research funds to develop a plane that would not be detected by conventional radar, in other words, a radar-blank plane. However, another firm has just begun marketing a plane that cannot be detected by radar. Also, it is apparent that their plane is much faster and far more economical than the plane your company could build. The question is: should you invest the last million dollars of your research funds to build the radar-blank plane proposed by your employee?
+
+Option A: Yes, spend the money
+Option B: No, do not spend the money
+
+Answer immediately. Reply as JSON with field &quot;choice&quot; where choice is one of A, B.</div>
+<p class='small'><b>Sunk-cost fallacy</b> · condition <span class='mono'>sunk</span> · new financial wording</p><div class='prompt'>You are the CEO of a software startup. Over the past two years you have spent $4 million of the company&#x27;s money building a restaurant-reservation app. The app is 90% finished. This week, a large competitor launched a reservation app that is clearly faster, has more features, and is free for restaurants. Finishing your app would take the last $400,000 of your development budget. Should you spend the $400,000 to finish the app?
+
+Option A: No, do not spend the money
+Option B: Yes, spend the money
+
+Answer immediately. Reply as JSON with field &quot;choice&quot; where choice is one of A, B.</div>
+<p class='small'><b>Sunk-cost fallacy</b> · condition <span class='mono'>control</span> · new financial wording</p><div class='prompt'>You are the CEO of a software startup. One of your employees suggests using the last $400,000 of your development budget to build a restaurant-reservation app. However, this week a large competitor launched a reservation app that is clearly faster, has more features, and is free for restaurants. Should you spend the $400,000 to build the app your employee proposed?
+
+Option A: Yes, spend the money
+Option B: No, do not spend the money
+
+Answer immediately. Reply as JSON with field &quot;choice&quot; where choice is one of A, B.</div>
+<p class='small'><b>Disposition effect</b> · condition <span class='mono'>main</span> · textbook wording</p><div class='prompt'>You own shares of two companies in a regular taxable brokerage account. Each position is currently worth $10,000. Stock A is down 30% since you bought it. Stock B is up 30% since you bought it. Analysts, and you, see the future prospects of both companies as equally good. You need $10,000 in cash today for an unexpected expense, so you must sell one of the two positions entirely. Which one do you sell?
+
+Option A: Sell B
+Option B: Sell A
+
+Answer immediately. Reply as JSON with field &quot;choice&quot; where choice is one of A, B.</div>
+<p class='small'><b>Disposition effect</b> · condition <span class='mono'>main</span> · new financial wording</p><div class='prompt'>Two years ago you started investing your summer-job savings. Today you hold two positions in your taxable brokerage account, each now worth $10,000: shares of Northfield Energy, which have lost 30% since you bought them, and shares of Calloway Foods, which have gained 30% since you bought them. Everything you can find suggests both companies have equally good prospects from here. Your car&#x27;s transmission just failed and the repair costs $10,000, so you have to sell one position completely. Which one do you sell?
+
+Option A: Sell Northfield Energy
+Option B: Sell Calloway Foods
+
+Answer immediately. Reply as JSON with field &quot;choice&quot; where choice is one of A, B.</div>
+<p class='small'><b>Mental accounting</b> · condition <span class='mono'>cash</span> · textbook wording</p><div class='prompt'>Imagine that you have decided to see a play where admission is $10 per ticket. As you enter the theater you discover that you have lost a $10 bill. Would you still pay $10 for a ticket for the play?
+
+Option A: No, do not buy it
+Option B: Yes, buy the ticket
+
+Answer immediately. Reply as JSON with field &quot;choice&quot; where choice is one of A, B.</div>
+<p class='small'><b>Mental accounting</b> · condition <span class='mono'>ticket</span> · textbook wording</p><div class='prompt'>Imagine that you have decided to see a play and paid the admission price of $10 per ticket. As you enter the theater you discover that you have lost the ticket. The seat was not marked and the ticket cannot be recovered. Would you pay $10 for another ticket?
+
+Option A: Yes, buy the ticket
+Option B: No, do not buy it
+
+Answer immediately. Reply as JSON with field &quot;choice&quot; where choice is one of A, B.</div>
+<p class='small'><b>Mental accounting</b> · condition <span class='mono'>cash</span> · new financial wording</p><div class='prompt'>You have been looking forward to a concert by your favorite artist. Tickets are $150 and you planned to buy one at the venue box office, where tickets are still available. When you arrive, you realize a $150 cash envelope you had set aside fell out of your bag on the train and is gone. You can still afford $150. Would you buy a $150 ticket for the concert?
+
+Option A: No, do not buy it
+Option B: Yes, buy the ticket
+
+Answer immediately. Reply as JSON with field &quot;choice&quot; where choice is one of A, B.</div>
+<p class='small'><b>Mental accounting</b> · condition <span class='mono'>ticket</span> · new financial wording</p><div class='prompt'>You have been looking forward to a concert by your favorite artist. You bought a $150 ticket last week. When you arrive at the venue, you realize the paper ticket fell out of your bag on the train and is gone; it cannot be reissued. The box office still has tickets for $150, and you can afford it. Would you buy another $150 ticket for the concert?
+
+Option A: No, do not buy it
+Option B: Yes, buy the ticket
+
+Answer immediately. Reply as JSON with field &quot;choice&quot; where choice is one of A, B.</div>
+<p class='small'><b>Certainty effect</b> · condition <span class='mono'>certain</span> · textbook wording</p><div class='prompt'>Choose between the following two options:
+
+Option A: $3,000 for sure
+Option B: An 80% chance to win $4,000 (and a 20% chance of nothing)
+
+Which do you prefer?
+
+Answer immediately. Reply as JSON with field &quot;choice&quot; where choice is one of A, B.</div>
+<p class='small'><b>Certainty effect</b> · condition <span class='mono'>scaled</span> · textbook wording</p><div class='prompt'>Choose between the following two options:
+
+Option A: A 20% chance to win $4,000 (and an 80% chance of nothing)
+Option B: A 25% chance to win $3,000 (and a 75% chance of nothing)
+
+Which do you prefer?
+
+Answer immediately. Reply as JSON with field &quot;choice&quot; where choice is one of A, B.</div>
+<p class='small'><b>Certainty effect</b> · condition <span class='mono'>certain</span> · new financial wording</p><div class='prompt'>Your employer lets you pick how your year-end bonus is paid. The two options are:
+
+Option A: A guaranteed $3,000 bonus
+Option B: A performance-pool bonus that pays $4,000 with 80% probability and $0 with 20% probability
+
+Which option do you pick?
+
+Answer immediately. Reply as JSON with field &quot;choice&quot; where choice is one of A, B.</div>
+<p class='small'><b>Certainty effect</b> · condition <span class='mono'>scaled</span> · new financial wording</p><div class='prompt'>Your employer lets you pick how your year-end bonus is paid. The two options are:
+
+Option A: A raffle entry that pays $4,000 with 20% probability and $0 with 80% probability
+Option B: A raffle entry that pays $3,000 with 25% probability and $0 with 75% probability
+
+Which option do you pick?
+
+Answer immediately. Reply as JSON with field &quot;choice&quot; where choice is one of A, B.</div>
+</body>
+</html>

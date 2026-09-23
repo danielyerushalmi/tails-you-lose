@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tails, You Lose · Yerushalmi 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Schibsted+Grotesk:wght@400;500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="paper.css">
+</head>
+<body>
+
+<p class="kicker">Working paper · {{DATE}} · Behavioral finance × artificial intelligence</p>
+<h1>Tails, You Lose</h1>
+<p class="subtitle">Do open-weight language models inherit human biases in financial decisions? Evidence from {{N_TRIALS}} decisions across seven classic experiments</p>
+<p class="byline">Daniel Yerushalmi</p>
+<p class="meta">Woodbury, New York · Code, data and interactive version: {{REPO_URL}} · {{SITE_URL}}</p>
+
+<div class="abstract">
+  <p class="kicker">Abstract</p>
+  <p>{{ABSTRACT}}</p>
+</div>
+
+<h2><span class="num">1</span>Introduction</h2>
+<p>Businesses are starting to hand financial decisions to language models. Banks pilot AI assistants that answer questions about accounts and investments, fintech apps add "AI advisors", and companies build agents that approve purchases, negotiate prices and rebalance portfolios. The pitch is often implicit: a machine is not swayed by emotion, so it should decide more rationally than a person.</p>
+<p>Behavioral economics gives a precise way to test that pitch. Over five decades, psychologists and economists documented a set of systematic, predictable departures from rational choice: people treat identical options differently depending on whether they are described as gains or losses (<em>framing</em>), weigh losses about twice as heavily as equal gains (<em>loss aversion</em>), let irrelevant numbers pull their estimates (<em>anchoring</em>), keep funding failing projects because of money already spent (<em>the sunk-cost fallacy</em>), sell winning investments too early while holding losers (<em>the disposition effect</em>), treat money differently depending on which mental budget it came from (<em>mental accounting</em>), and overvalue certainty (<em>the certainty effect</em>). Language models learn from enormous amounts of human-written text. A natural question is whether they learned our biases along with our language.</p>
+<p>This paper asks three questions that matter to anyone deploying a model for financial decisions:</p>
+<ol>
+  <li><b>Do open-weight models show the classic biases, and how strongly compared with people?</b></li>
+  <li><b>Is apparent rationality real, or memorized?</b> The classic experiments are among the most-discussed problems in psychology, so a model may simply recognize the "Asian disease problem" and recite the textbook-correct answer. We test each bias twice: in its famous wording and in a new financial scenario with the same structure.</li>
+  <li><b>Do cheap interventions help?</b> We test two that a business could deploy tomorrow: asking the model to reason before answering, and giving it a "disciplined, CFA-certified financial advisor" persona.</li>
+</ol>
+<p>The study runs entirely on ten open-weight models on a single consumer graphics card, at zero API cost, so every result can be reproduced by anyone with the same hardware. That includes a size ladder of five models from one family (Qwen3, 0.6 to 14 billion parameters), which lets us ask whether rationality simply improves with scale.</p>
+
+<h2><span class="num">2</span>Related work</h2>
+<p>Horton (2023) proposed treating language models as simulated economic agents, "<i>homo silicus</i>", and showed that GPT-3 qualitatively reproduces several classic behavioral-economics results. Binz and Schulz (2023) put GPT-3 through a battery of cognitive-psychology tasks and found human-like performance on many vignette tasks, along with fragility to small changes in wording. Hagendorff, Fabi and Kosinski (2023) reported that intuitive, human-like reasoning errors grew as GPT-3 models scaled up, then largely disappeared in ChatGPT-era models. Chen et al. (2023) found GPT's budget decisions to be highly consistent with utility maximization, often more consistent than human subjects, although they were sensitive to framing. Suri et al. (2024) documented anchoring, framing and endowment effects in GPT-3.5. Macmillan-Scott and Musolesi (2024) found that models are irrational in ways that often differ from human error patterns and are notably inconsistent across repeated trials. Closest to this study, Ross, Kim and Lo (2024) used utility theory to measure loss aversion and related biases in LLMs and concluded that current models are "neither entirely human-like nor entirely economicus-like". Hu and Zhao (2026) built a finance-domain benchmark showing that models tend to follow biased analyst opinions.</p>
+<p>Two methodological lines also shape this design. Models prefer particular answer positions or letters regardless of content (Pezeshkpour and Hruschka, 2024; Zheng et al., 2024), which is why option order is randomized on every trial here. And because the classic vignettes are widely reproduced online, we pair each one with a structurally identical new financial version. This design is meant to separate reasoning from recall.</p>
+<p>This study adds (a) a single protocol covering seven biases central to behavioral finance, (b) a within-family scaling ladder on open weights, (c) the textbook-versus-new-wording contamination test, (d) two deployable interventions, and (e) a normalized, human-anchored score, the bias quotient, that makes different biases comparable.</p>
+
+<h2><span class="num">3</span>Method</h2>
+<h3>3.1 Models</h3>
+{{TABLE_MODELS}}
+<p>All models ran locally through Ollama 0.33.3 on an NVIDIA RTX 5080 (16 GB), with default 4-bit quantization. Answers were forced into valid JSON with Ollama's schema-constrained decoding: the model must return one of the listed option letters (or a number, for estimates). Qwen3's hidden "thinking" mode was turned off so that every model faced the same format, and reasoning was elicited explicitly instead (Section 3.3). Sampling temperature was 0.8 with a fixed, per-trial seed, so every trial can be regenerated exactly.</p>
+
+<h3>3.2 Experiments</h3>
+<p>Each experiment reproduces the structure of a classic human study (Table 2). In every case, a perfectly consistent decision-maker would show no difference between conditions. For each experiment we wrote two <em>surfaces</em>: the <b>textbook</b> wording (the original or a close paraphrase of it) and a <b>new financial</b> scenario with the same payoffs and structure. For example, the "Asian disease" framing problem becomes a $600 million pension fund facing a credit crisis, with hedging plans that save $200 million for sure or save everything with probability 1/3. Every prompt appears in Appendix A.</p>
+{{TABLE_EXPERIMENTS}}
+
+<h3>3.3 Design</h3>
+<p>The design is between-subjects, like the human studies: every trial is a fresh conversation in which the model sees exactly one version of one problem, and nothing carries over between trials. A system prompt describes a decision-making study and asks for "the choice you yourself would make". Answer options are shuffled and relabeled A/B on every trial. Each model ran in two answering modes: <b>fast</b>, which returns only the answer, and <b>thinks first</b>, where the JSON schema requires a written "reasoning" field before the answer. On the new financial wording, each model also answered in fast mode under an <b>advisor persona</b> ("an experienced, CFA-certified financial advisor known for disciplined, rational decisions"). Each cell (model × experiment × condition × surface × mode × persona) contains 30 trials, for {{N_TRIALS}} trials in total. A trial whose answer could not be parsed (for example, reasoning that ran past the token limit) was re-run with a larger limit; {{N_ERRORS}} trials remained unusable and were excluded.</p>
+
+<h3>3.4 Measures</h3>
+<p>Each bias is measured as the gap a consistent agent would not show: the difference in choice shares between the two framings (framing, sunk cost, mental accounting, certainty), the share of forced sales that sell the winner (disposition; because the prompt specifies a taxable account and equal prospects, selling the loser to harvest the tax loss is the normative choice, so a rational seller scores 0), the anchoring index of Jacowitz and Kahneman (1995), i.e. the gap between median estimates after high and low anchors divided by the gap between the anchors, and for loss aversion the coefficient <i>λ</i> = X*/$100, where X* is the win size at which acceptance of a coin flip that loses $100 crosses 50%. Acceptance rates across the nine prize sizes are first made monotone (weighted isotonic regression), and X* is interpolated on a log scale. A model that accepts even the $50 prize (a bet with negative expected value) is recorded at the bound <i>λ</i> = 0.5, and one that rejects even the $600 prize at <i>λ</i> = 6. For loss aversion the bias is <i>λ</i> − 1, so values below zero mean the model takes bets a risk-neutral agent would refuse.</p>
+<p>To compare biases measured in different units, we divide each model's bias by the human bias on the same measure, which gives the <b>bias quotient (BQ)</b>. BQ = 0 means no bias; BQ = 1 means exactly as biased as the people in the original study; negative values mean the model is biased in the <i>opposite</i> direction from people, which is also a departure from consistency. A model's overall score is its mean absolute BQ across the seven experiments. Human reference values (Table 2) come from the original publications: framing 72% vs 22% sure choices (Tversky and Kahneman, 1981); <i>λ</i> = 2.25 (Tversky and Kahneman, 1992); anchoring index 0.49 (Jacowitz and Kahneman, 1995); sunk cost 85% vs 17% (Arkes and Blumer, 1985); mental accounting 88% vs 46% (Tversky and Kahneman, 1981); certainty 80% vs 35% (Kahneman and Tversky, 1979); and for the disposition effect a 60% winner-sale share, implied by Odean's (1998) proportions of gains and losses realized (0.148 vs 0.098). Uncertainty is reported as 95% bootstrap intervals (1,000 resamples), binary contrasts are tested with Fisher's exact test, and comparisons across models use the Wilcoxon signed-rank test.</p>
+
+{{RESULTS}}
+
+<h2><span class="num">{{SEC_LIM}}</span>Limitations</h2>
+<ul>
+  <li><b>Small, quantized, open models.</b> The largest model has 14 billion parameters. Frontier chat models are far larger and more heavily tuned, and prior work suggests some biases shrink with that tuning (Hagendorff et al., 2023). These results describe the kind of model a company can run privately and cheaply, not the frontier.</li>
+  <li><b>Human baselines use different wording.</b> The human numbers come from the textbook versions, often decades old and mostly from university students. The new financial versions have no human data of their own, so BQ on the new wording compares a model's effect on new wording with the human effect on old wording.</li>
+  <li><b>Thirty trials per cell.</b> Intervals on individual cells are wide (roughly ±25 percentage points on a difference of two proportions). Conclusions in this paper rest on patterns across many cells and models, not on single cells.</li>
+  <li><b>A model is not one person.</b> Sampling at temperature 0.8 makes each trial a draw from the model's answer distribution, which we treat like a population of respondents. A model answering deterministically would look more "decisive" without being more rational.</li>
+  <li><b>Prompt sensitivity.</b> One wording per surface cannot rule out that other paraphrases behave differently; the loss-aversion wording change reported in Section {{SEC_FRIEND}} shows how large such effects can be.</li>
+</ul>
+
+<h2><span class="num">{{SEC_CONC}}</span>Conclusion</h2>
+{{CONCLUSION}}
+
+<h2>Acknowledgments and AI disclosure</h2>
+<p class="small">This project was built with extensive assistance from an AI system (Anthropic's Claude), which wrote much of the experiment code, statistical analysis, figures and interactive site under the author's direction. All raw model outputs, prompts and analysis code are public so that every number can be checked.</p>
+
+<h2>References</h2>
+<div class="refs">
+<p>Arkes, H. R., &amp; Blumer, C. (1985). The psychology of sunk cost. <i>Organizational Behavior and Human Decision Processes, 35</i>(1), 124–140.</p>
+<p>Binz, M., &amp; Schulz, E. (2023). Using cognitive psychology to understand GPT-3. <i>Proceedings of the National Academy of Sciences, 120</i>(6), e2218523120.</p>
+<p>Chen, Y., Liu, T. X., Shan, Y., &amp; Zhong, S. (2023). The emergence of economic rationality of GPT. <i>Proceedings of the National Academy of Sciences, 120</i>(51), e2316205120.</p>
+<p>Hagendorff, T., Fabi, S., &amp; Kosinski, M. (2023). Human-like intuitive behavior and reasoning biases emerged in large language models but disappeared in ChatGPT. <i>Nature Computational Science, 3</i>, 833–838.</p>
+<p>Horton, J. J. (2023). Large language models as simulated economic agents: What can we learn from homo silicus? NBER Working Paper 31122.</p>
+<p>Hu, X., &amp; Zhao, J. (2026). Fin-Bias: Comprehensive evaluation for LLM decision-making under human bias in finance domain. arXiv:2605.09106.</p>
+<p>Jacowitz, K. E., &amp; Kahneman, D. (1995). Measures of anchoring in estimation tasks. <i>Personality and Social Psychology Bulletin, 21</i>(11), 1161–1166.</p>
+<p>Kahneman, D. (2011). <i>Thinking, fast and slow</i>. Farrar, Straus and Giroux.</p>
+<p>Kahneman, D., &amp; Tversky, A. (1979). Prospect theory: An analysis of decision under risk. <i>Econometrica, 47</i>(2), 263–291.</p>
+<p>Macmillan-Scott, O., &amp; Musolesi, M. (2024). (Ir)rationality and cognitive biases in large language models. <i>Royal Society Open Science, 11</i>(6), 240255.</p>
+<p>Odean, T. (1998). Are investors reluctant to realize their losses? <i>The Journal of Finance, 53</i>(5), 1775–1798.</p>
+<p>Pezeshkpour, P., &amp; Hruschka, E. (2024). Large language models sensitivity to the order of options in multiple-choice questions. <i>Findings of NAACL 2024</i>. arXiv:2308.11483.</p>
+<p>Ross, J., Kim, Y., &amp; Lo, A. W. (2024). LLM economicus? Mapping the behavioral biases of LLMs via utility theory. <i>Conference on Language Modeling (COLM)</i>. arXiv:2408.02784.</p>
+<p>Shefrin, H., &amp; Statman, M. (1985). The disposition to sell winners too early and ride losers too long: Theory and evidence. <i>The Journal of Finance, 40</i>(3), 777–790.</p>
+<p>Suri, G., Slater, L. R., Ziaee, A., &amp; Nguyen, M. (2024). Do large language models show decision heuristics similar to humans? A case study using GPT-3.5. <i>Journal of Experimental Psychology: General, 153</i>(4), 1066–1075.</p>
+<p>Tversky, A., &amp; Kahneman, D. (1974). Judgment under uncertainty: Heuristics and biases. <i>Science, 185</i>(4157), 1124–1131.</p>
+<p>Tversky, A., &amp; Kahneman, D. (1981). The framing of decisions and the psychology of choice. <i>Science, 211</i>(4481), 453–458.</p>
+<p>Tversky, A., &amp; Kahneman, D. (1992). Advances in prospect theory: Cumulative representation of uncertainty. <i>Journal of Risk and Uncertainty, 5</i>(4), 297–323.</p>
+<p>Zheng, C., Zhou, H., Meng, F., Zhou, J., &amp; Huang, M. (2024). Large language models are not robust multiple choice selectors. <i>International Conference on Learning Representations (ICLR)</i>. arXiv:2309.03882.</p>
+</div>
+
+<div class="pagebreak"></div>
+<h2>Appendix A · Every prompt</h2>
+{{APPENDIX_PROMPTS}}
+</body>
+</html>

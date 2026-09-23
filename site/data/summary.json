@@ -1,0 +1,2336 @@
+{
+ "human": {
+  "framing": {
+   "value": 0.5,
+   "detail": "72% sure (gain) vs 22% sure (loss); Tversky & Kahneman 1981, N=152/155"
+  },
+  "loss_aversion": {
+   "value": 1.25,
+   "lambda": 2.25,
+   "detail": "lambda = 2.25; Tversky & Kahneman 1992"
+  },
+  "anchoring": {
+   "value": 0.49,
+   "detail": "mean anchoring index 0.49; Jacowitz & Kahneman 1995"
+  },
+  "sunk_cost": {
+   "value": 0.6799999999999999,
+   "detail": "85% invest (sunk) vs 17% (control); Arkes & Blumer 1985, N=48/60"
+  },
+  "disposition": {
+   "value": 0.10162601626016254,
+   "detail": "implied from PGR 0.148 vs PLR 0.098 (Odean 1998): 60% of forced choices sell the winner"
+  },
+  "mental_accounting": {
+   "value": 0.42,
+   "detail": "88% buy (lost cash) vs 46% (lost ticket); Tversky & Kahneman 1981, N=183/200"
+  },
+  "certainty": {
+   "value": 0.45000000000000007,
+   "detail": "80% sure $3000 vs 35% choose 25%-$3000 in scaled version; Kahneman & Tversky 1979, N=95"
+  }
+ },
+ "labels": {
+  "framing": "Framing effect",
+  "loss_aversion": "Loss aversion",
+  "anchoring": "Anchoring",
+  "sunk_cost": "Sunk-cost fallacy",
+  "disposition": "Disposition effect",
+  "mental_accounting": "Mental accounting",
+  "certainty": "Certainty effect"
+ },
+ "experiments": [
+  "framing",
+  "loss_aversion",
+  "anchoring",
+  "sunk_cost",
+  "disposition",
+  "mental_accounting",
+  "certainty"
+ ],
+ "n_trials": 10414,
+ "n_errors": 36,
+ "models": [
+  "qwen3:0.6b",
+  "qwen3:1.7b",
+  "qwen3:4b",
+  "qwen3:8b"
+ ],
+ "position_bias_first_option": {
+  "qwen3:0.6b": 0.5793,
+  "qwen3:1.7b": 0.5541,
+  "qwen3:4b": 0.4336,
+  "qwen3:8b": 0.393
+ },
+ "results": [
+  {
+   "model": "qwen3:0.6b",
+   "surface": "classic",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "framing",
+   "bias": 0.3,
+   "ci_lo": 0.0667,
+   "ci_hi": 0.5,
+   "bq": 0.6,
+   "n": 60,
+   "parts": {
+    "sure_gain": 0.8333,
+    "sure_loss": 0.5333,
+    "p": 0.0251
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "classic",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "loss_aversion",
+   "bias": -0.75,
+   "ci_lo": -0.75,
+   "ci_hi": -0.5298,
+   "bq": -0.6,
+   "n": 270,
+   "parts": {
+    "lambda": 0.25,
+    "accept_curve": {
+     "50": 0.7333,
+     "100": 0.5333,
+     "125": 0.8,
+     "150": 0.8667,
+     "200": 0.7667,
+     "250": 0.9,
+     "300": 0.7667,
+     "400": 0.9,
+     "600": 0.8667
+    }
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "classic",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "anchoring",
+   "bias": 0.7273,
+   "ci_lo": 0.0145,
+   "ci_hi": 1.0,
+   "bq": 1.4842,
+   "n": 90,
+   "parts": {
+    "median_none": 19.25,
+    "median_low": 10.0,
+    "median_high": 50.0,
+    "anchor_low": 10.0,
+    "anchor_high": 65.0
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "classic",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "sunk_cost",
+   "bias": -0.1667,
+   "ci_lo": -0.3333,
+   "ci_hi": 0.0,
+   "bq": -0.2451,
+   "n": 60,
+   "parts": {
+    "invest_sunk": 0.8,
+    "invest_control": 0.9667,
+    "p": 0.1028
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "classic",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "disposition",
+   "bias": 0.1667,
+   "ci_lo": 0.0,
+   "ci_hi": 0.3333,
+   "bq": 1.64,
+   "n": 30,
+   "parts": {
+    "sell_winner": 0.6667,
+    "p": 0.0987
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "classic",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "mental_accounting",
+   "bias": 0.5333,
+   "ci_lo": 0.3667,
+   "ci_hi": 0.7,
+   "bq": 1.2698,
+   "n": 60,
+   "parts": {
+    "buy_cash": 1.0,
+    "buy_ticket": 0.4667,
+    "p": 0.0
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "classic",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "certainty",
+   "bias": 0.4667,
+   "ci_lo": 0.2667,
+   "ci_hi": 0.6667,
+   "bq": 1.037,
+   "n": 60,
+   "parts": {
+    "safe_certain": 0.8333,
+    "safe_scaled": 0.3667,
+    "p": 0.0005
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "classic",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "framing",
+   "bias": 0.1333,
+   "ci_lo": -0.1,
+   "ci_hi": 0.3675,
+   "bq": 0.2667,
+   "n": 60,
+   "parts": {
+    "sure_gain": 0.6,
+    "sure_loss": 0.4667,
+    "p": 0.4379
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "classic",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "loss_aversion",
+   "bias": -0.75,
+   "ci_lo": -0.75,
+   "ci_hi": -0.75,
+   "bq": -0.6,
+   "n": 270,
+   "parts": {
+    "lambda": 0.25,
+    "accept_curve": {
+     "50": 0.8333,
+     "100": 0.9667,
+     "125": 0.8,
+     "150": 0.8667,
+     "200": 0.8,
+     "250": 1.0,
+     "300": 0.9333,
+     "400": 0.8667,
+     "600": 0.9333
+    }
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "classic",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "anchoring",
+   "bias": 1.0,
+   "ci_lo": 1.0,
+   "ci_hi": 1.1432,
+   "bq": 2.0408,
+   "n": 90,
+   "parts": {
+    "median_none": 53.6,
+    "median_low": 10.0,
+    "median_high": 65.0,
+    "anchor_low": 10.0,
+    "anchor_high": 65.0
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "classic",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "sunk_cost",
+   "bias": -0.4,
+   "ci_lo": -0.5667,
+   "ci_hi": -0.2333,
+   "bq": -0.5882,
+   "n": 60,
+   "parts": {
+    "invest_sunk": 0.6,
+    "invest_control": 1.0,
+    "p": 0.0001
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "classic",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "disposition",
+   "bias": 0.0667,
+   "ci_lo": -0.1333,
+   "ci_hi": 0.2333,
+   "bq": 0.656,
+   "n": 30,
+   "parts": {
+    "sell_winner": 0.5667,
+    "p": 0.5847
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "classic",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "mental_accounting",
+   "bias": 0.4,
+   "ci_lo": 0.2333,
+   "ci_hi": 0.5667,
+   "bq": 0.9524,
+   "n": 60,
+   "parts": {
+    "buy_cash": 1.0,
+    "buy_ticket": 0.6,
+    "p": 0.0001
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "classic",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "certainty",
+   "bias": 0.0,
+   "ci_lo": -0.2333,
+   "ci_hi": 0.2667,
+   "bq": 0.0,
+   "n": 60,
+   "parts": {
+    "safe_certain": 0.3667,
+    "safe_scaled": 0.3667,
+    "p": 1.0
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "novel",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "framing",
+   "bias": 0.5,
+   "ci_lo": 0.2667,
+   "ci_hi": 0.7333,
+   "bq": 1.0,
+   "n": 60,
+   "parts": {
+    "sure_gain": 0.7,
+    "sure_loss": 0.2,
+    "p": 0.0002
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "novel",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "loss_aversion",
+   "bias": -0.75,
+   "ci_lo": -0.75,
+   "ci_hi": -0.75,
+   "bq": -0.6,
+   "n": 270,
+   "parts": {
+    "lambda": 0.25,
+    "accept_curve": {
+     "50": 0.9333,
+     "100": 0.8667,
+     "125": 0.9333,
+     "150": 0.9,
+     "200": 0.8,
+     "250": 0.9667,
+     "300": 0.8667,
+     "400": 0.8,
+     "600": 0.8333
+    }
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "novel",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "anchoring",
+   "bias": 1.0,
+   "ci_lo": 0.9963,
+   "ci_hi": 1.0,
+   "bq": 2.0408,
+   "n": 90,
+   "parts": {
+    "median_none": 16.0,
+    "median_low": 10.0,
+    "median_high": 150.0,
+    "anchor_low": 10.0,
+    "anchor_high": 150.0
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "novel",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "sunk_cost",
+   "bias": 0.4,
+   "ci_lo": 0.2,
+   "ci_hi": 0.6,
+   "bq": 0.5882,
+   "n": 60,
+   "parts": {
+    "invest_sunk": 0.4667,
+    "invest_control": 0.0667,
+    "p": 0.0009
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "novel",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "disposition",
+   "bias": 0.0667,
+   "ci_lo": -0.1,
+   "ci_hi": 0.2333,
+   "bq": 0.656,
+   "n": 30,
+   "parts": {
+    "sell_winner": 0.5667,
+    "p": 0.5847
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "novel",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "mental_accounting",
+   "bias": 0.2667,
+   "ci_lo": 0.1333,
+   "ci_hi": 0.4333,
+   "bq": 0.6349,
+   "n": 60,
+   "parts": {
+    "buy_cash": 1.0,
+    "buy_ticket": 0.7333,
+    "p": 0.0046
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "novel",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "certainty",
+   "bias": 0.4333,
+   "ci_lo": 0.2,
+   "ci_hi": 0.6333,
+   "bq": 0.963,
+   "n": 60,
+   "parts": {
+    "safe_certain": 0.8,
+    "safe_scaled": 0.3667,
+    "p": 0.0014
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "advisor",
+   "exp": "framing",
+   "bias": 0.0333,
+   "ci_lo": -0.2333,
+   "ci_hi": 0.3,
+   "bq": 0.0667,
+   "n": 60,
+   "parts": {
+    "sure_gain": 0.4333,
+    "sure_loss": 0.4,
+    "p": 1.0
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "advisor",
+   "exp": "loss_aversion",
+   "bias": -0.75,
+   "ci_lo": -0.75,
+   "ci_hi": -0.75,
+   "bq": -0.6,
+   "n": 270,
+   "parts": {
+    "lambda": 0.25,
+    "accept_curve": {
+     "50": 1.0,
+     "100": 0.9667,
+     "125": 1.0,
+     "150": 0.8,
+     "200": 1.0,
+     "250": 1.0,
+     "300": 1.0,
+     "400": 0.9,
+     "600": 0.9667
+    }
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "advisor",
+   "exp": "anchoring",
+   "bias": 0.9804,
+   "ci_lo": 0.9643,
+   "ci_hi": 0.9929,
+   "bq": 2.0007,
+   "n": 90,
+   "parts": {
+    "median_none": 12.0,
+    "median_low": 10.0,
+    "median_high": 147.25,
+    "anchor_low": 10.0,
+    "anchor_high": 150.0
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "advisor",
+   "exp": "sunk_cost",
+   "bias": 0.7333,
+   "ci_lo": 0.5667,
+   "ci_hi": 0.8667,
+   "bq": 1.0784,
+   "n": 60,
+   "parts": {
+    "invest_sunk": 0.7333,
+    "invest_control": 0.0,
+    "p": 0.0
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "advisor",
+   "exp": "disposition",
+   "bias": -0.0667,
+   "ci_lo": -0.2333,
+   "ci_hi": 0.1,
+   "bq": -0.656,
+   "n": 30,
+   "parts": {
+    "sell_winner": 0.4333,
+    "p": 0.5847
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "advisor",
+   "exp": "mental_accounting",
+   "bias": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "bq": 0.0,
+   "n": 60,
+   "parts": {
+    "buy_cash": 1.0,
+    "buy_ticket": 1.0,
+    "p": 1.0
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "advisor",
+   "exp": "certainty",
+   "bias": -0.1667,
+   "ci_lo": -0.4,
+   "ci_hi": 0.0667,
+   "bq": -0.3704,
+   "n": 60,
+   "parts": {
+    "safe_certain": 0.4,
+    "safe_scaled": 0.5667,
+    "p": 0.3015
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "framing",
+   "bias": 0.2667,
+   "ci_lo": 0.0333,
+   "ci_hi": 0.5333,
+   "bq": 0.5333,
+   "n": 60,
+   "parts": {
+    "sure_gain": 0.5667,
+    "sure_loss": 0.3,
+    "p": 0.0673
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "loss_aversion",
+   "bias": -0.75,
+   "ci_lo": -0.75,
+   "ci_hi": -0.75,
+   "bq": -0.6,
+   "n": 270,
+   "parts": {
+    "lambda": 0.25,
+    "accept_curve": {
+     "50": 1.0,
+     "100": 1.0,
+     "125": 1.0,
+     "150": 1.0,
+     "200": 1.0,
+     "250": 1.0,
+     "300": 1.0,
+     "400": 1.0,
+     "600": 1.0
+    }
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "anchoring",
+   "bias": 1.0,
+   "ci_lo": 1.0,
+   "ci_hi": 1.0,
+   "bq": 2.0408,
+   "n": 90,
+   "parts": {
+    "median_none": 12.0,
+    "median_low": 10.0,
+    "median_high": 150.0,
+    "anchor_low": 10.0,
+    "anchor_high": 150.0
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "sunk_cost",
+   "bias": 0.6333,
+   "ci_lo": 0.4667,
+   "ci_hi": 0.8,
+   "bq": 0.9314,
+   "n": 60,
+   "parts": {
+    "invest_sunk": 0.6333,
+    "invest_control": 0.0,
+    "p": 0.0
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "disposition",
+   "bias": 0.1,
+   "ci_lo": -0.0667,
+   "ci_hi": 0.2667,
+   "bq": 0.984,
+   "n": 30,
+   "parts": {
+    "sell_winner": 0.6,
+    "p": 0.3616
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "mental_accounting",
+   "bias": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "bq": 0.0,
+   "n": 60,
+   "parts": {
+    "buy_cash": 1.0,
+    "buy_ticket": 1.0,
+    "p": 1.0
+   }
+  },
+  {
+   "model": "qwen3:0.6b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "certainty",
+   "bias": -0.0333,
+   "ci_lo": -0.2667,
+   "ci_hi": 0.2,
+   "bq": -0.0741,
+   "n": 60,
+   "parts": {
+    "safe_certain": 0.3333,
+    "safe_scaled": 0.3667,
+    "p": 1.0
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "classic",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "framing",
+   "bias": -0.0333,
+   "ci_lo": -0.2675,
+   "ci_hi": 0.2,
+   "bq": -0.0667,
+   "n": 60,
+   "parts": {
+    "sure_gain": 0.6667,
+    "sure_loss": 0.7,
+    "p": 1.0
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "classic",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "loss_aversion",
+   "bias": 0.0309,
+   "ci_lo": -0.1193,
+   "ci_hi": 0.1534,
+   "bq": 0.0247,
+   "n": 270,
+   "parts": {
+    "lambda": 1.0309,
+    "accept_curve": {
+     "50": 0.0,
+     "100": 0.6,
+     "125": 0.4667,
+     "150": 0.9333,
+     "200": 0.9,
+     "250": 0.9667,
+     "300": 0.8333,
+     "400": 0.8667,
+     "600": 0.9
+    }
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "classic",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "anchoring",
+   "bias": 0.0909,
+   "ci_lo": 0.0091,
+   "ci_hi": 0.0909,
+   "bq": 0.1855,
+   "n": 90,
+   "parts": {
+    "median_none": 67.4,
+    "median_low": 50.0,
+    "median_high": 55.0,
+    "anchor_low": 10.0,
+    "anchor_high": 65.0
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "classic",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "sunk_cost",
+   "bias": 0.0667,
+   "ci_lo": 0.0,
+   "ci_hi": 0.1667,
+   "bq": 0.098,
+   "n": 60,
+   "parts": {
+    "invest_sunk": 0.0667,
+    "invest_control": 0.0,
+    "p": 0.4915
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "classic",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "disposition",
+   "bias": -0.1,
+   "ci_lo": -0.2667,
+   "ci_hi": 0.0667,
+   "bq": -0.984,
+   "n": 30,
+   "parts": {
+    "sell_winner": 0.4,
+    "p": 0.3616
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "classic",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "mental_accounting",
+   "bias": 0.0333,
+   "ci_lo": 0.0,
+   "ci_hi": 0.1,
+   "bq": 0.0794,
+   "n": 60,
+   "parts": {
+    "buy_cash": 0.0333,
+    "buy_ticket": 0.0,
+    "p": 1.0
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "classic",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "certainty",
+   "bias": -0.1333,
+   "ci_lo": -0.3333,
+   "ci_hi": 0.0333,
+   "bq": -0.2963,
+   "n": 60,
+   "parts": {
+    "safe_certain": 0.1,
+    "safe_scaled": 0.2333,
+    "p": 0.299
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "classic",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "framing",
+   "bias": -0.2333,
+   "ci_lo": -0.4667,
+   "ci_hi": 0.0,
+   "bq": -0.4667,
+   "n": 60,
+   "parts": {
+    "sure_gain": 0.4,
+    "sure_loss": 0.6333,
+    "p": 0.1205
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "classic",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "loss_aversion",
+   "bias": 0.9104,
+   "ci_lo": -0.3409,
+   "ci_hi": 11.0,
+   "bq": 0.7283,
+   "n": 270,
+   "parts": {
+    "lambda": 1.9104,
+    "accept_curve": {
+     "50": 0.4333,
+     "100": 0.5333,
+     "125": 0.3333,
+     "150": 0.5333,
+     "200": 0.5667,
+     "250": 0.3667,
+     "300": 0.6,
+     "400": 0.5,
+     "600": 0.6333
+    }
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "classic",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "anchoring",
+   "bias": 0.3455,
+   "ci_lo": 0.3455,
+   "ci_hi": 0.3455,
+   "bq": 0.705,
+   "n": 90,
+   "parts": {
+    "median_none": 50.0,
+    "median_low": 11.0,
+    "median_high": 30.0,
+    "anchor_low": 10.0,
+    "anchor_high": 65.0
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "classic",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "sunk_cost",
+   "bias": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "bq": 0.0,
+   "n": 60,
+   "parts": {
+    "invest_sunk": 0.0,
+    "invest_control": 0.0,
+    "p": 1.0
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "classic",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "disposition",
+   "bias": -0.0667,
+   "ci_lo": -0.2333,
+   "ci_hi": 0.1,
+   "bq": -0.656,
+   "n": 30,
+   "parts": {
+    "sell_winner": 0.4333,
+    "p": 0.5847
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "classic",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "mental_accounting",
+   "bias": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "bq": 0.0,
+   "n": 60,
+   "parts": {
+    "buy_cash": 0.0,
+    "buy_ticket": 0.0,
+    "p": 1.0
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "classic",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "certainty",
+   "bias": -0.2667,
+   "ci_lo": -0.5,
+   "ci_hi": -0.0333,
+   "bq": -0.5926,
+   "n": 60,
+   "parts": {
+    "safe_certain": 0.4667,
+    "safe_scaled": 0.7333,
+    "p": 0.0641
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "novel",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "framing",
+   "bias": 0.5667,
+   "ci_lo": 0.3667,
+   "ci_hi": 0.7667,
+   "bq": 1.1333,
+   "n": 60,
+   "parts": {
+    "sure_gain": 0.9667,
+    "sure_loss": 0.4,
+    "p": 0.0
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "novel",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "loss_aversion",
+   "bias": -0.4506,
+   "ci_lo": -0.75,
+   "ci_hi": -0.0184,
+   "bq": -0.3605,
+   "n": 270,
+   "parts": {
+    "lambda": 0.5494,
+    "accept_curve": {
+     "50": 0.3,
+     "100": 0.8,
+     "125": 0.7667,
+     "150": 0.6333,
+     "200": 0.6,
+     "250": 0.8,
+     "300": 0.7333,
+     "400": 0.7333,
+     "600": 0.8
+    }
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "novel",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "anchoring",
+   "bias": 0.03,
+   "ci_lo": 0.0,
+   "ci_hi": 0.7943,
+   "bq": 0.0612,
+   "n": 90,
+   "parts": {
+    "median_none": 36.0,
+    "median_low": 36.0,
+    "median_high": 40.2,
+    "anchor_low": 10.0,
+    "anchor_high": 150.0
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "novel",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "sunk_cost",
+   "bias": 0.3,
+   "ci_lo": 0.1333,
+   "ci_hi": 0.4667,
+   "bq": 0.4412,
+   "n": 60,
+   "parts": {
+    "invest_sunk": 0.3,
+    "invest_control": 0.0,
+    "p": 0.0019
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "novel",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "disposition",
+   "bias": -0.0667,
+   "ci_lo": -0.2333,
+   "ci_hi": 0.1,
+   "bq": -0.656,
+   "n": 30,
+   "parts": {
+    "sell_winner": 0.4333,
+    "p": 0.5847
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "novel",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "mental_accounting",
+   "bias": 0.4333,
+   "ci_lo": 0.2333,
+   "ci_hi": 0.6333,
+   "bq": 1.0317,
+   "n": 60,
+   "parts": {
+    "buy_cash": 0.8667,
+    "buy_ticket": 0.4333,
+    "p": 0.0009
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "novel",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "certainty",
+   "bias": 0.8667,
+   "ci_lo": 0.7333,
+   "ci_hi": 0.9667,
+   "bq": 1.9259,
+   "n": 60,
+   "parts": {
+    "safe_certain": 0.9667,
+    "safe_scaled": 0.1,
+    "p": 0.0
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "advisor",
+   "exp": "framing",
+   "bias": 0.2,
+   "ci_lo": 0.0333,
+   "ci_hi": 0.4,
+   "bq": 0.4,
+   "n": 60,
+   "parts": {
+    "sure_gain": 0.9333,
+    "sure_loss": 0.7333,
+    "p": 0.0797
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "advisor",
+   "exp": "loss_aversion",
+   "bias": 11.0,
+   "ci_lo": 11.0,
+   "ci_hi": 11.0,
+   "bq": 8.8,
+   "n": 270,
+   "parts": {
+    "lambda": 12.0,
+    "accept_curve": {
+     "50": 0.0,
+     "100": 0.0,
+     "125": 0.0,
+     "150": 0.0,
+     "200": 0.0,
+     "250": 0.0,
+     "300": 0.0,
+     "400": 0.0,
+     "600": 0.0
+    }
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "advisor",
+   "exp": "anchoring",
+   "bias": 0.8893,
+   "ci_lo": 0.8893,
+   "ci_hi": 0.8893,
+   "bq": 1.8149,
+   "n": 90,
+   "parts": {
+    "median_none": 14.4,
+    "median_low": 10.5,
+    "median_high": 135.0,
+    "anchor_low": 10.0,
+    "anchor_high": 150.0
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "advisor",
+   "exp": "sunk_cost",
+   "bias": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "bq": 0.0,
+   "n": 60,
+   "parts": {
+    "invest_sunk": 0.0,
+    "invest_control": 0.0,
+    "p": 1.0
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "advisor",
+   "exp": "disposition",
+   "bias": -0.0333,
+   "ci_lo": -0.2,
+   "ci_hi": 0.1333,
+   "bq": -0.328,
+   "n": 30,
+   "parts": {
+    "sell_winner": 0.4667,
+    "p": 0.8555
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "advisor",
+   "exp": "mental_accounting",
+   "bias": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "bq": 0.0,
+   "n": 60,
+   "parts": {
+    "buy_cash": 0.0,
+    "buy_ticket": 0.0,
+    "p": 1.0
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "advisor",
+   "exp": "certainty",
+   "bias": 0.4,
+   "ci_lo": 0.1667,
+   "ci_hi": 0.6,
+   "bq": 0.8889,
+   "n": 60,
+   "parts": {
+    "safe_certain": 0.5333,
+    "safe_scaled": 0.1333,
+    "p": 0.0022
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "framing",
+   "bias": 0.6333,
+   "ci_lo": 0.4667,
+   "ci_hi": 0.8,
+   "bq": 1.2667,
+   "n": 60,
+   "parts": {
+    "sure_gain": 1.0,
+    "sure_loss": 0.3667,
+    "p": 0.0
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "loss_aversion",
+   "bias": -0.75,
+   "ci_lo": -0.75,
+   "ci_hi": -0.75,
+   "bq": -0.6,
+   "n": 270,
+   "parts": {
+    "lambda": 0.25,
+    "accept_curve": {
+     "50": 1.0,
+     "100": 1.0,
+     "125": 1.0,
+     "150": 1.0,
+     "200": 1.0,
+     "250": 1.0,
+     "300": 1.0,
+     "400": 1.0,
+     "600": 1.0
+    }
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "anchoring",
+   "bias": 0.8821,
+   "ci_lo": 0.8821,
+   "ci_hi": 0.8821,
+   "bq": 1.8003,
+   "n": 90,
+   "parts": {
+    "median_none": 2.4,
+    "median_low": 11.5,
+    "median_high": 135.0,
+    "anchor_low": 10.0,
+    "anchor_high": 150.0
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "sunk_cost",
+   "bias": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "bq": 0.0,
+   "n": 60,
+   "parts": {
+    "invest_sunk": 0.0,
+    "invest_control": 0.0,
+    "p": 1.0
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "disposition",
+   "bias": -0.0333,
+   "ci_lo": -0.2,
+   "ci_hi": 0.1333,
+   "bq": -0.328,
+   "n": 30,
+   "parts": {
+    "sell_winner": 0.4667,
+    "p": 0.8555
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "mental_accounting",
+   "bias": -0.4667,
+   "ci_lo": -0.6667,
+   "ci_hi": -0.2667,
+   "bq": -1.1111,
+   "n": 60,
+   "parts": {
+    "buy_cash": 0.1,
+    "buy_ticket": 0.5667,
+    "p": 0.0003
+   }
+  },
+  {
+   "model": "qwen3:1.7b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "certainty",
+   "bias": 0.4,
+   "ci_lo": 0.2333,
+   "ci_hi": 0.5667,
+   "bq": 0.8889,
+   "n": 60,
+   "parts": {
+    "safe_certain": 0.4,
+    "safe_scaled": 0.0,
+    "p": 0.0001
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "classic",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "framing",
+   "bias": 0.3333,
+   "ci_lo": 0.1667,
+   "ci_hi": 0.5333,
+   "bq": 0.6667,
+   "n": 58,
+   "parts": {
+    "sure_gain": 1.0,
+    "sure_loss": 0.6667,
+    "p": 0.0008
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "classic",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "loss_aversion",
+   "bias": -0.182,
+   "ci_lo": -0.3275,
+   "ci_hi": -0.0911,
+   "bq": -0.1456,
+   "n": 270,
+   "parts": {
+    "lambda": 0.818,
+    "accept_curve": {
+     "50": 0.0333,
+     "100": 0.6,
+     "125": 0.9,
+     "150": 1.0,
+     "200": 0.9667,
+     "250": 0.9667,
+     "300": 1.0,
+     "400": 0.9,
+     "600": 0.9
+    }
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "classic",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "anchoring",
+   "bias": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "bq": 0.0,
+   "n": 90,
+   "parts": {
+    "median_none": 28.0,
+    "median_low": 28.0,
+    "median_high": 28.0,
+    "anchor_low": 10.0,
+    "anchor_high": 65.0
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "classic",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "sunk_cost",
+   "bias": 0.0333,
+   "ci_lo": 0.0,
+   "ci_hi": 0.1,
+   "bq": 0.049,
+   "n": 60,
+   "parts": {
+    "invest_sunk": 0.0333,
+    "invest_control": 0.0,
+    "p": 1.0
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "classic",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "disposition",
+   "bias": -0.1667,
+   "ci_lo": -0.5,
+   "ci_hi": 0.1667,
+   "bq": -1.64,
+   "n": 9,
+   "parts": {
+    "sell_winner": 0.3333,
+    "p": 0.5078
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "classic",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "mental_accounting",
+   "bias": 0.3667,
+   "ci_lo": 0.1333,
+   "ci_hi": 0.5675,
+   "bq": 0.873,
+   "n": 60,
+   "parts": {
+    "buy_cash": 0.7,
+    "buy_ticket": 0.3333,
+    "p": 0.0092
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "classic",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "certainty",
+   "bias": 0.3667,
+   "ci_lo": 0.1667,
+   "ci_hi": 0.6,
+   "bq": 0.8148,
+   "n": 60,
+   "parts": {
+    "safe_certain": 0.5333,
+    "safe_scaled": 0.1667,
+    "p": 0.0061
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "classic",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "framing",
+   "bias": -0.1333,
+   "ci_lo": -0.3333,
+   "ci_hi": 0.0667,
+   "bq": -0.2667,
+   "n": 60,
+   "parts": {
+    "sure_gain": 0.7333,
+    "sure_loss": 0.8667,
+    "p": 0.3334
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "classic",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "loss_aversion",
+   "bias": -0.75,
+   "ci_lo": -0.75,
+   "ci_hi": -0.6924,
+   "bq": -0.6,
+   "n": 270,
+   "parts": {
+    "lambda": 0.25,
+    "accept_curve": {
+     "50": 0.9667,
+     "100": 0.9667,
+     "125": 1.0,
+     "150": 1.0,
+     "200": 1.0,
+     "250": 1.0,
+     "300": 1.0,
+     "400": 1.0,
+     "600": 1.0
+    }
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "classic",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "anchoring",
+   "bias": 0.0045,
+   "ci_lo": -0.0109,
+   "ci_hi": 0.0873,
+   "bq": 0.0093,
+   "n": 90,
+   "parts": {
+    "median_none": 47.5,
+    "median_low": 14.8,
+    "median_high": 15.05,
+    "anchor_low": 10.0,
+    "anchor_high": 65.0
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "classic",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "sunk_cost",
+   "bias": 0.0667,
+   "ci_lo": -0.1333,
+   "ci_hi": 0.2667,
+   "bq": 0.098,
+   "n": 60,
+   "parts": {
+    "invest_sunk": 0.2333,
+    "invest_control": 0.1667,
+    "p": 0.748
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "classic",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "disposition",
+   "bias": -0.1667,
+   "ci_lo": -0.3333,
+   "ci_hi": 0.0,
+   "bq": -1.64,
+   "n": 30,
+   "parts": {
+    "sell_winner": 0.3333,
+    "p": 0.0987
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "classic",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "mental_accounting",
+   "bias": 0.1667,
+   "ci_lo": -0.0667,
+   "ci_hi": 0.4,
+   "bq": 0.3968,
+   "n": 60,
+   "parts": {
+    "buy_cash": 0.6333,
+    "buy_ticket": 0.4667,
+    "p": 0.2993
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "classic",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "certainty",
+   "bias": 0.0333,
+   "ci_lo": -0.2333,
+   "ci_hi": 0.2667,
+   "bq": 0.0741,
+   "n": 60,
+   "parts": {
+    "safe_certain": 0.6333,
+    "safe_scaled": 0.6,
+    "p": 1.0
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "novel",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "framing",
+   "bias": 0.4322,
+   "ci_lo": 0.2322,
+   "ci_hi": 0.6322,
+   "bq": 0.8644,
+   "n": 59,
+   "parts": {
+    "sure_gain": 0.9655,
+    "sure_loss": 0.5333,
+    "p": 0.0002
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "novel",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "loss_aversion",
+   "bias": -0.75,
+   "ci_lo": -0.75,
+   "ci_hi": -0.5373,
+   "bq": -0.6,
+   "n": 267,
+   "parts": {
+    "lambda": 0.25,
+    "accept_curve": {
+     "50": 0.6333,
+     "100": 0.931,
+     "125": 0.8,
+     "150": 0.8667,
+     "200": 0.8966,
+     "250": 0.9667,
+     "300": 0.9333,
+     "400": 0.9667,
+     "600": 0.931
+    }
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "novel",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "anchoring",
+   "bias": 0.0679,
+   "ci_lo": 0.0071,
+   "ci_hi": 0.1286,
+   "bq": 0.1385,
+   "n": 90,
+   "parts": {
+    "median_none": 44.4,
+    "median_low": 35.5,
+    "median_high": 45.0,
+    "anchor_low": 10.0,
+    "anchor_high": 150.0
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "novel",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "sunk_cost",
+   "bias": 0.1333,
+   "ci_lo": 0.0333,
+   "ci_hi": 0.2667,
+   "bq": 0.1961,
+   "n": 60,
+   "parts": {
+    "invest_sunk": 0.1333,
+    "invest_control": 0.0,
+    "p": 0.1124
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "novel",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "disposition",
+   "bias": 0.1667,
+   "ci_lo": -0.0714,
+   "ci_hi": 0.3571,
+   "bq": 1.64,
+   "n": 21,
+   "parts": {
+    "sell_winner": 0.6667,
+    "p": 0.1892
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "novel",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "mental_accounting",
+   "bias": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "bq": 0.0,
+   "n": 60,
+   "parts": {
+    "buy_cash": 1.0,
+    "buy_ticket": 1.0,
+    "p": 1.0
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "novel",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "certainty",
+   "bias": 0.4667,
+   "ci_lo": 0.3,
+   "ci_hi": 0.6333,
+   "bq": 1.037,
+   "n": 60,
+   "parts": {
+    "safe_certain": 0.4667,
+    "safe_scaled": 0.0,
+    "p": 0.0
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "advisor",
+   "exp": "framing",
+   "bias": 0.0333,
+   "ci_lo": -0.1,
+   "ci_hi": 0.1667,
+   "bq": 0.0667,
+   "n": 60,
+   "parts": {
+    "sure_gain": 0.9333,
+    "sure_loss": 0.9,
+    "p": 1.0
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "advisor",
+   "exp": "loss_aversion",
+   "bias": -0.75,
+   "ci_lo": -0.75,
+   "ci_hi": -0.75,
+   "bq": -0.6,
+   "n": 270,
+   "parts": {
+    "lambda": 0.25,
+    "accept_curve": {
+     "50": 0.9,
+     "100": 0.9667,
+     "125": 0.9333,
+     "150": 0.9,
+     "200": 0.9667,
+     "250": 0.9667,
+     "300": 1.0,
+     "400": 0.9667,
+     "600": 1.0
+    }
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "advisor",
+   "exp": "anchoring",
+   "bias": 0.8157,
+   "ci_lo": 0.7929,
+   "ci_hi": 0.8443,
+   "bq": 1.6647,
+   "n": 90,
+   "parts": {
+    "median_none": 28.8,
+    "median_low": 20.8,
+    "median_high": 135.0,
+    "anchor_low": 10.0,
+    "anchor_high": 150.0
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "advisor",
+   "exp": "sunk_cost",
+   "bias": 0.3,
+   "ci_lo": 0.1333,
+   "ci_hi": 0.4667,
+   "bq": 0.4412,
+   "n": 60,
+   "parts": {
+    "invest_sunk": 0.3,
+    "invest_control": 0.0,
+    "p": 0.0019
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "advisor",
+   "exp": "disposition",
+   "bias": -0.2,
+   "ci_lo": -0.3667,
+   "ci_hi": -0.0333,
+   "bq": -1.968,
+   "n": 30,
+   "parts": {
+    "sell_winner": 0.3,
+    "p": 0.0428
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "advisor",
+   "exp": "mental_accounting",
+   "bias": 0.6333,
+   "ci_lo": 0.4333,
+   "ci_hi": 0.8333,
+   "bq": 1.5079,
+   "n": 60,
+   "parts": {
+    "buy_cash": 0.7667,
+    "buy_ticket": 0.1333,
+    "p": 0.0
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "advisor",
+   "exp": "certainty",
+   "bias": 0.0333,
+   "ci_lo": -0.2,
+   "ci_hi": 0.2667,
+   "bq": 0.0741,
+   "n": 60,
+   "parts": {
+    "safe_certain": 0.5333,
+    "safe_scaled": 0.5,
+    "p": 1.0
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "framing",
+   "bias": -0.2,
+   "ci_lo": -0.4,
+   "ci_hi": 0.0008,
+   "bq": -0.4,
+   "n": 60,
+   "parts": {
+    "sure_gain": 0.6333,
+    "sure_loss": 0.8333,
+    "p": 0.1432
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "loss_aversion",
+   "bias": -0.75,
+   "ci_lo": -0.75,
+   "ci_hi": -0.75,
+   "bq": -0.6,
+   "n": 270,
+   "parts": {
+    "lambda": 0.25,
+    "accept_curve": {
+     "50": 1.0,
+     "100": 1.0,
+     "125": 1.0,
+     "150": 1.0,
+     "200": 1.0,
+     "250": 1.0,
+     "300": 1.0,
+     "400": 1.0,
+     "600": 1.0
+    }
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "anchoring",
+   "bias": 0.8714,
+   "ci_lo": 0.8357,
+   "ci_hi": 0.8929,
+   "bq": 1.7784,
+   "n": 90,
+   "parts": {
+    "median_none": 26.4,
+    "median_low": 18.0,
+    "median_high": 140.0,
+    "anchor_low": 10.0,
+    "anchor_high": 150.0
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "sunk_cost",
+   "bias": 0.2333,
+   "ci_lo": 0.0,
+   "ci_hi": 0.4333,
+   "bq": 0.3431,
+   "n": 60,
+   "parts": {
+    "invest_sunk": 0.4,
+    "invest_control": 0.1667,
+    "p": 0.084
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "disposition",
+   "bias": -0.1,
+   "ci_lo": -0.2667,
+   "ci_hi": 0.0667,
+   "bq": -0.984,
+   "n": 30,
+   "parts": {
+    "sell_winner": 0.4,
+    "p": 0.3616
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "mental_accounting",
+   "bias": 0.2,
+   "ci_lo": 0.0,
+   "ci_hi": 0.4,
+   "bq": 0.4762,
+   "n": 60,
+   "parts": {
+    "buy_cash": 0.9,
+    "buy_ticket": 0.7,
+    "p": 0.1042
+   }
+  },
+  {
+   "model": "qwen3:4b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "certainty",
+   "bias": 0.0,
+   "ci_lo": -0.2008,
+   "ci_hi": 0.2008,
+   "bq": 0.0,
+   "n": 60,
+   "parts": {
+    "safe_certain": 0.2667,
+    "safe_scaled": 0.2667,
+    "p": 1.0
+   }
+  },
+  {
+   "model": "qwen3:8b",
+   "surface": "classic",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "framing",
+   "bias": 0.2,
+   "ci_lo": 0.0667,
+   "ci_hi": 0.3667,
+   "bq": 0.4,
+   "n": 60,
+   "parts": {
+    "sure_gain": 1.0,
+    "sure_loss": 0.8,
+    "p": 0.0237
+   }
+  },
+  {
+   "model": "qwen3:8b",
+   "surface": "classic",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "loss_aversion",
+   "bias": 0.894,
+   "ci_lo": 0.5254,
+   "ci_hi": 1.316,
+   "bq": 0.7152,
+   "n": 270,
+   "parts": {
+    "lambda": 1.894,
+    "accept_curve": {
+     "50": 0.0,
+     "100": 0.0333,
+     "125": 0.6333,
+     "150": 0.7333,
+     "200": 0.4667,
+     "250": 0.9333,
+     "300": 0.6333,
+     "400": 0.5,
+     "600": 0.6
+    }
+   }
+  },
+  {
+   "model": "qwen3:8b",
+   "surface": "classic",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "framing",
+   "bias": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "bq": 0.0,
+   "n": 60,
+   "parts": {
+    "sure_gain": 1.0,
+    "sure_loss": 1.0,
+    "p": 1.0
+   }
+  },
+  {
+   "model": "qwen3:8b",
+   "surface": "classic",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "loss_aversion",
+   "bias": -0.0364,
+   "ci_lo": -0.5264,
+   "ci_hi": 0.2459,
+   "bq": -0.0292,
+   "n": 270,
+   "parts": {
+    "lambda": 0.9636,
+    "accept_curve": {
+     "50": 0.0,
+     "100": 0.5333,
+     "125": 0.4667,
+     "150": 1.0,
+     "200": 0.7333,
+     "250": 1.0,
+     "300": 1.0,
+     "400": 0.5333,
+     "600": 0.4667
+    }
+   }
+  },
+  {
+   "model": "qwen3:8b",
+   "surface": "novel",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "framing",
+   "bias": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "bq": 0.0,
+   "n": 60,
+   "parts": {
+    "sure_gain": 1.0,
+    "sure_loss": 1.0,
+    "p": 1.0
+   }
+  },
+  {
+   "model": "qwen3:8b",
+   "surface": "novel",
+   "mode": "deliberate",
+   "persona": "none",
+   "exp": "loss_aversion",
+   "bias": -0.75,
+   "ci_lo": -0.75,
+   "ci_hi": -0.75,
+   "bq": -0.6,
+   "n": 60,
+   "parts": {
+    "lambda": 0.25,
+    "accept_curve": {
+     "50": 1.0,
+     "100": 1.0
+    }
+   }
+  },
+  {
+   "model": "qwen3:8b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "advisor",
+   "exp": "framing",
+   "bias": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "bq": 0.0,
+   "n": 60,
+   "parts": {
+    "sure_gain": 1.0,
+    "sure_loss": 1.0,
+    "p": 1.0
+   }
+  },
+  {
+   "model": "qwen3:8b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "advisor",
+   "exp": "loss_aversion",
+   "bias": -0.75,
+   "ci_lo": -0.75,
+   "ci_hi": -0.75,
+   "bq": -0.6,
+   "n": 40,
+   "parts": {
+    "lambda": 0.25,
+    "accept_curve": {
+     "50": 1.0,
+     "100": 1.0
+    }
+   }
+  },
+  {
+   "model": "qwen3:8b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "framing",
+   "bias": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "bq": 0.0,
+   "n": 60,
+   "parts": {
+    "sure_gain": 1.0,
+    "sure_loss": 1.0,
+    "p": 1.0
+   }
+  },
+  {
+   "model": "qwen3:8b",
+   "surface": "novel",
+   "mode": "fast",
+   "persona": "none",
+   "exp": "loss_aversion",
+   "bias": -0.75,
+   "ci_lo": -0.75,
+   "ci_hi": -0.75,
+   "bq": -0.6,
+   "n": 60,
+   "parts": {
+    "lambda": 0.25,
+    "accept_curve": {
+     "50": 1.0,
+     "100": 1.0
+    }
+   }
+  }
+ ],
+ "acquiescence_x50": {
+  "qwen3:0.6b": {
+   "classic_deliberate": 0.7333,
+   "novel_deliberate": 0.9333,
+   "classic_fast": 0.8333,
+   "novel_fast": 1.0
+  },
+  "qwen3:1.7b": {
+   "classic_deliberate": 0.0,
+   "novel_deliberate": 0.3,
+   "classic_fast": 0.4333,
+   "novel_fast": 1.0
+  },
+  "qwen3:4b": {
+   "classic_deliberate": 0.0333,
+   "novel_deliberate": 0.6333,
+   "classic_fast": 0.9667,
+   "novel_fast": 1.0
+  },
+  "qwen3:8b": {
+   "classic_deliberate": 0.0,
+   "novel_deliberate": 1.0,
+   "classic_fast": 0.0,
+   "novel_fast": 1.0
+  }
+ },
+ "tests": {},
+ "per_exp_tests": {
+  "fast_vs_deliberate": {
+   "framing": {
+    "mean_a": -0.1167,
+    "mean_b": 0.4,
+    "n": 4
+   },
+   "loss_aversion": {
+    "mean_a": -0.1252,
+    "mean_b": -0.0014,
+    "n": 4
+   },
+   "anchoring": {
+    "mean_a": 0.9184,
+    "mean_b": 0.5566,
+    "n": 3
+   },
+   "sunk_cost": {
+    "mean_a": -0.1634,
+    "mean_b": -0.0327,
+    "n": 3
+   },
+   "disposition": {
+    "mean_a": -0.5467,
+    "mean_b": -0.328,
+    "n": 3
+   },
+   "mental_accounting": {
+    "mean_a": 0.4497,
+    "mean_b": 0.7407,
+    "n": 3
+   },
+   "certainty": {
+    "mean_a": -0.1728,
+    "mean_b": 0.5185,
+    "n": 3
+   }
+  },
+  "fast_vs_deliberate_novel": {
+   "framing": {
+    "mean_a": 0.35,
+    "mean_b": 0.7494,
+    "n": 4
+   },
+   "loss_aversion": {
+    "mean_a": -0.6,
+    "mean_b": -0.5401,
+    "n": 4
+   },
+   "anchoring": {
+    "mean_a": 1.8732,
+    "mean_b": 0.7468,
+    "n": 3
+   },
+   "sunk_cost": {
+    "mean_a": 0.4248,
+    "mean_b": 0.4085,
+    "n": 3
+   },
+   "disposition": {
+    "mean_a": -0.1093,
+    "mean_b": 0.5467,
+    "n": 3
+   },
+   "mental_accounting": {
+    "mean_a": -0.2116,
+    "mean_b": 0.5556,
+    "n": 3
+   },
+   "certainty": {
+    "mean_a": 0.2716,
+    "mean_b": 1.3086,
+    "n": 3
+   }
+  },
+  "textbook_vs_novel": {
+   "framing": {
+    "mean_a": -0.1167,
+    "mean_b": 0.35,
+    "n": 4
+   },
+   "loss_aversion": {
+    "mean_a": -0.1252,
+    "mean_b": -0.6,
+    "n": 4
+   },
+   "anchoring": {
+    "mean_a": 0.9184,
+    "mean_b": 1.8732,
+    "n": 3
+   },
+   "sunk_cost": {
+    "mean_a": -0.1634,
+    "mean_b": 0.4248,
+    "n": 3
+   },
+   "disposition": {
+    "mean_a": -0.5467,
+    "mean_b": -0.1093,
+    "n": 3
+   },
+   "mental_accounting": {
+    "mean_a": 0.4497,
+    "mean_b": -0.2116,
+    "n": 3
+   },
+   "certainty": {
+    "mean_a": -0.1728,
+    "mean_b": 0.2716,
+    "n": 3
+   }
+  }
+ }
+}

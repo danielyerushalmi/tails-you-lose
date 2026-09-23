@@ -1,0 +1,14 @@
+logs/
+shots/
+.playwright-mcp/
+__pycache__/
+*.pyc
+data/*.bak*
+data/throughput_test.jsonl
+data/summary_test.json
+NOTES.md
+run_all.sh.bak
+.vercel/
+.claude/
+ruvector.db
+FOR_DANIEL.md

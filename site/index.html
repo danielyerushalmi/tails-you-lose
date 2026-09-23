@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tails, You Lose · Money biases in ten AI models</title>
+<meta name="description" content="An original study: ten open AI models took the classic behavioral-finance experiments. Take the same tests and see whose biases you share.">
+<meta property="og:title" content="Tails, You Lose">
+<meta property="og:description" content="Do AI models inherit human money biases? Ten models, seven classic experiments, 31,500 decisions. Take the test yourself.">
+<meta property="og:image" content="/assets/og.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23b8923a'/%3E%3Ctext x='16' y='22' font-size='17' text-anchor='middle' font-family='serif' fill='%231d2a24'%3E%CE%BB%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=5">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"
+        integrity="sha384-HOvlOYPIs/zjoIkWUGXkVmXsjr8GuZLV+Q+rcPwmJOVZVpvTSXQChiN4t9Euv9Vc" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"
+        integrity="sha384-P8VzCVnT9NBUkMrpcIZrJbA7EBjJvh/fJS6PmP+4nLIM284DtsImIv8D0fFjIkeh" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"
+        integrity="sha384-xb96EMJeax+NLXMC88ZBa1xAeAW+kn+horHh/zFlbMLG2UPWhMJJSlv7fi57hS+Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"
+        integrity="sha384-O55L/6rhHr9CFvrxqv5luxOCcmVaBmETbZbJDP+Do8T0pztTACsFBD/IXCNkj7DV" crossorigin="anonymous"></script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
+    "@dimforge/rapier3d-compat": "https://cdn.jsdelivr.net/npm/@dimforge/rapier3d-compat@0.14.0/+esm"
+  }
+}
+</script>
+</head>
+<body>
+<canvas id="gl" aria-hidden="true"></canvas>
+
+<header class="nav">
+  <a class="wordmark" href="#top">Tails, you lose<span class="wm-dot">.</span></a>
+  <nav class="nav-links" aria-label="Sections">
+    <a href="#test" data-nav="test">The test</a>
+    <a href="#audit" data-nav="audit">The audit</a>
+    <a href="#findings" data-nav="findings">Findings</a>
+    <a href="#paper" data-nav="paper">Paper</a>
+  </nav>
+  <a class="pill" href="paper.pdf" data-magnetic>Read the paper <span class="dot">↓</span></a>
+</header>
+
+<main id="top">
+  <!-- ───────────────────────── HERO ───────────────────────── -->
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="util kicker"><span class="red">●</span> An original study · Ten AI models · Seven classic money tests</p>
+      <h1 class="display hero-title" data-split>Tails, you lose.</h1>
+      <p class="hero-statement" id="hero-statement">We gave ten AI models the experiments that made behavioral economics famous. Then we checked their books.</p>
+    </div>
+    <div class="hero-panel" id="hero-panel">
+      <span class="mark tl">+</span><span class="mark tr">+</span><span class="mark bl">+</span><span class="mark br">+</span>
+      <p class="util panel-label tl-label">Fig. 00 · Petty cash · <span id="coin-count">0</span> coins</p>
+      <p class="util panel-label tr-label" id="tally">Heads <b id="t-heads">0</b> · Tails <b id="t-tails" class="red">0</b></p>
+      <p class="util panel-label bl-label">Shove them around · Click a coin to flip it</p>
+      <p class="util panel-label br-label">Fair coin · p = 0.5</p>
+    </div>
+    <p class="util scroll-cue"><span class="cue-line"></span>Scroll to open the ledger</p>
+  </section>
+
+  <!-- ───────────────────────── LEDGER SUMMARY ───────────────────────── -->
+  <section class="ledger-summary" id="summary">
+    <div class="section-head">
+      <h2 class="display" data-split>The books, briefly.</h2>
+      <p class="util annotation">Every figure on this page is computed live from the raw trial data. Nothing is hand-typed.</p>
+    </div>
+    <div class="figures">
+      <div class="figure"><p class="util">Entry A · Models audited</p><p class="big-num" data-count="models">10</p><p class="fig-note">Open-weight models from Alibaba, Meta, Mistral, Google and Microsoft, 0.6 to 14 billion parameters.</p></div>
+      <div class="figure"><p class="util">Entry B · Decisions logged</p><p class="big-num" data-count="trials">31,500</p><p class="fig-note">Each one a fresh conversation. Every model saw one version of one problem at a time, like a human subject.</p></div>
+      <div class="figure"><p class="util">Entry C · Biases tested</p><p class="big-num">7</p><p class="fig-note">Framing, loss aversion, anchoring, sunk cost, the disposition effect, mental accounting, the certainty effect.</p></div>
+      <div class="figure"><p class="util">Entry D · API spend</p><p class="big-num"><span class="red">$0</span>.00</p><p class="fig-note">Every trial ran locally, overnight, on one consumer graphics card.</p></div>
+    </div>
+    <div class="headline-finding" id="headline-finding">
+      <p class="util">Bottom line</p>
+      <p class="finding-text" id="finding-text">Loading the ledger…</p>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── THE TEST ───────────────────────── -->
+  <section class="test" id="test">
+    <div class="section-head">
+      <h2 class="display" data-split>Take the test they took.</h2>
+      <p class="util annotation">Seven sealed entries. You get one randomly assigned version of each problem, exactly like the models did. The name of each bias stays sealed until you answer.</p>
+    </div>
+    <div class="entries" id="entries"><!-- built by study.js --></div>
+  </section>
+
+  <!-- ───────────────────────── THE AUDIT ───────────────────────── -->
+  <section class="audit" id="audit">
+    <div class="section-head">
+      <h2 class="display" data-split>The audit.</h2>
+      <p class="util annotation">Bias quotient: each model's bias divided by the human bias on the same test. 0 is perfectly consistent. 1 is exactly as biased as people. Hover any cell.</p>
+    </div>
+    <div class="audit-controls" role="group" aria-label="Audit filters">
+      <div class="seg" data-key="mode"><span class="util">Answering</span>
+        <button class="seg-btn is-on" data-val="fast">Fast</button><button class="seg-btn" data-val="deliberate">Thinks first</button></div>
+      <div class="seg" data-key="surface"><span class="util">Wording</span>
+        <button class="seg-btn is-on" data-val="novel">New financial</button><button class="seg-btn" data-val="classic">Textbook</button></div>
+      <div class="seg" data-key="persona"><span class="util">Persona</span>
+        <button class="seg-btn is-on" data-val="none">None</button><button class="seg-btn" data-val="advisor">Financial advisor</button></div>
+    </div>
+    <div class="audit-table-wrap"><table class="audit-table" id="audit-table"></table></div>
+    <div class="scale-legend" id="scale-legend"></div>
+    <div class="tooltip" id="tooltip" role="status" aria-live="polite"></div>
+  </section>
+
+  <!-- ───────────────────────── FINDINGS ───────────────────────── -->
+  <section class="findings" id="findings">
+    <div class="section-head">
+      <h2 class="display" data-split>Four findings.</h2>
+      <p class="util annotation">Each finding compares the same models under two conditions. Lines show the change. Hover for exact figures.</p>
+    </div>
+    <div class="finding-list" id="finding-list"><!-- built by study.js --></div>
+  </section>
+
+  <!-- ───────────────────────── MATCH ───────────────────────── -->
+  <section class="match" id="match">
+    <div class="match-card">
+      <p class="util">Reconciliation</p>
+      <h2 class="display match-title" id="match-title">Answer the seven entries to see who you decide like.</h2>
+      <div class="match-rows" id="match-rows"></div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── PAPER ───────────────────────── -->
+  <section class="paper" id="paper">
+    <div class="section-head">
+      <h2 class="display" data-split>Read the full paper.</h2>
+      <p class="util annotation">Method, statistics, limitations and every prompt used. The code and raw data are public.</p>
+    </div>
+    <div class="paper-grid">
+      <a class="paper-card" href="paper.pdf" data-tilt>
+        <p class="util">Working paper · PDF</p>
+        <p class="paper-title">Tails, You Lose: Do Open-Weight Language Models Inherit Human Biases in Financial Decisions?</p>
+        <p class="util paper-by">Daniel Yerushalmi · 2026</p>
+        <span class="pill as-span">Download <span class="dot">↓</span></span>
+      </a>
+      <div class="method">
+        <div class="method-row"><p class="util">Design</p><p>Between-subjects. Every trial is a fresh conversation with one version of one problem. Option order is shuffled every trial so a model's taste for "Option A" cannot pose as a preference.</p></div>
+        <div class="method-row"><p class="util">Wording</p><p>Each test exists twice: the famous textbook wording, and a new financial scenario with identical structure. If a model only behaves on the textbook version, it memorized the answer.</p></div>
+        <div class="method-row"><p class="util">Modes</p><p>Fast (answer only) and thinks-first (writes its reasoning before answering), plus a financial-advisor persona. 30 trials per cell, temperature 0.8.</p></div>
+        <div class="method-row"><p class="util">Source</p><p><a class="ink-link" id="repo-link" href="https://github.com/danielyerushalmi/tails-you-lose">github.com/danielyerushalmi/tails-you-lose</a></p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <p class="util">Prepared by Daniel Yerushalmi · Woodbury, New York</p>
+  <p class="util">Audited on one GPU · $0.00 in API fees</p>
+  <p class="util">No models were harmed. Several were embarrassed.</p>
+</footer>
+
+<script type="module" src="app.js?v=3"></script>
+</body>
+</html>
