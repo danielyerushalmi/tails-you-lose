@@ -137,17 +137,26 @@ def fig_pairs(name="fig4_conditions"):
 
 # ---------------------------------------------------------------- Fig 5: loss-aversion curves
 def fig_loss_curves(name="fig5_loss_curves"):
-    fig, ax = plt.subplots(figsize=(4.6, 2.8))
-    for m in MODELS:
-        r = row(m, "loss_aversion")
-        if not r: continue
-        c = r["parts"].get("accept_curve") or {}
-        xs = sorted(int(k) for k in c)
-        ax.plot(xs, [c[str(k)] if str(k) in c else c.get(k) for k in xs], color=MODEL, lw=1.2, alpha=0.75)
+    """Acceptance of the $100-loss coin bet by prize, averaged over models, for each wording (fast answers)."""
+    fig, ax = plt.subplots(figsize=(4.8, 2.9))
+    styles = {"classic": ("Coin flip (textbook)", INK, "-"), "novel": ("Brokerage trade (new)", MODEL, "--"),
+              "friend": ("Friend's business (exploratory)", RED, ":")}
+    for surf, (lab, col, ls) in styles.items():
+        curves = []
+        for m in MODELS:
+            r = row(m, "loss_aversion", surf)
+            if not r: continue
+            c = r["parts"].get("accept_curve") or {}
+            curves.append({int(k): v for k, v in c.items()})
+        if not curves: continue
+        xs = sorted(set().union(*[c.keys() for c in curves]))
+        mean = [np.mean([c[x] for c in curves if x in c]) for x in xs]
+        ax.plot(xs, mean, color=col, ls=ls, lw=2, marker="o", ms=3.5, label=f"{lab} (n={len(curves)} models)")
     ax.axvline(100, color=INK2, ls=(0, (2, 2)), lw=0.8); ax.text(104, 0.04, "break-even", fontsize=7, color=INK2)
-    ax.axvline(225, color=RED, lw=1); ax.text(229, 0.04, "human λ = 2.25", fontsize=7, color=RED)
+    ax.axvline(225, color=RED, lw=0.8, alpha=0.6); ax.text(229, 0.04, "human λ = 2.25", fontsize=7, color=RED)
     ax.set_xscale("log"); ax.set_xticks([50, 100, 150, 200, 300, 400, 600], ["$50", "$100", "$150", "$200", "$300", "$400", "$600"]); ax.minorticks_off()
-    ax.set_ylim(-0.03, 1.03); ax.set_xlabel("Win if heads (loss if tails = $100)"); ax.set_ylabel("Share accepting the bet")
+    ax.set_ylim(-0.03, 1.03); ax.set_xlabel("Win if heads (loss if tails = $100)"); ax.set_ylabel("Share accepting (mean over models)")
+    ax.legend(frameon=False, fontsize=6.8, loc="upper center", bbox_to_anchor=(0.5, -0.24), ncol=1)
     save(fig, name)
 
 

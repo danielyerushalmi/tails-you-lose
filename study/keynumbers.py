@@ -26,7 +26,8 @@ for s in ("novel", "classic"):
         good = [v for v in vals.values() if v is not None]
         K[f"avg_{s}_{mo}"] = float(np.mean(good)) if good else None
         K[f"rank_{s}_{mo}"] = sorted([(v, m) for m, v in vals.items() if v is not None])
-K["avg_novel_advisor"] = float(np.mean([v for v in (mabs(m, "novel", "fast", "advisor") for m in MODELS) if v is not None]))
+_adv = [v for v in (mabs(m, "novel", "fast", "advisor") for m in MODELS) if v is not None]
+K["avg_novel_advisor"] = float(np.mean(_adv)) if _adv else None
 
 # per-bias: how many models show a significant human-direction effect (novel, fast)
 sig = {}
@@ -54,7 +55,7 @@ json.dump(K, open("../paper/numbers_auto.json", "w", encoding="utf-8"), indent=1
 
 print(f"trials {D['n_trials']}  errors {D['n_errors']}")
 for k in ("avg_novel_fast", "avg_novel_deliberate", "avg_classic_fast", "avg_classic_deliberate", "avg_novel_advisor"):
-    print(f"{k:26s} {K[k]:.3f}")
+    print(f"{k:26s} {K[k] if K[k] is None else round(K[k], 3)}")
 print("\nrank novel fast:", [(m, round(v, 2)) for v, m in K["rank_novel_fast"]])
 print("rank novel delib:", [(m, round(v, 2)) for v, m in K["rank_novel_deliberate"]])
 print("\nper bias (novel fast): n models sig human-direction / sig reverse / median BQ   | classic median BQ")

@@ -42,7 +42,7 @@
    "exp": "loss_aversion",
    "cond": "x150",
    "surface": "novel",
-   "prompt": "A friend is raising money for a small business and offers you a one-time deal. You put in $100. There is a 50% chance the business fails and you lose your $100, and a 50% chance it succeeds and you get your $100 back plus $150 in profit. Nothing else about your finances changes either way. Would you take the deal?\n\nOption A: Accept\nOption B: Decline\n\nAnswer immediately. Reply as JSON with field \"choice\" where choice is one of A, B."
+   "prompt": "Your brokerage app offers you a one-time trade. You stake $100. There is a 50% chance the trade loses and you lose your $100, and a 50% chance it wins and you get your $100 back plus $150 in profit. Nothing else about your finances changes either way. Would you make the trade?\n\nOption A: Accept\nOption B: Decline\n\nAnswer immediately. Reply as JSON with field \"choice\" where choice is one of A, B."
   },
   {
    "exp": "anchoring",
@@ -163,6 +163,12 @@
    "cond": "scaled",
    "surface": "novel",
    "prompt": "Your employer lets you pick how your year-end bonus is paid. The two options are:\n\nOption A: A raffle entry that pays $4,000 with 20% probability and $0 with 80% probability\nOption B: A raffle entry that pays $3,000 with 25% probability and $0 with 75% probability\n\nWhich option do you pick?\n\nAnswer immediately. Reply as JSON with field \"choice\" where choice is one of A, B."
+  },
+  {
+   "exp": "loss_aversion",
+   "cond": "x150",
+   "surface": "friend",
+   "prompt": "A friend is raising money for a small business and offers you a one-time deal. You put in $100. There is a 50% chance the business fails and you lose your $100, and a 50% chance it succeeds and you get your $100 back plus $150 in profit. Nothing else about your finances changes either way. Would you take the deal?\n\nOption A: Accept\nOption B: Decline\n\nAnswer immediately. Reply as JSON with field \"choice\" where choice is one of A, B."
   }
  ]
 }

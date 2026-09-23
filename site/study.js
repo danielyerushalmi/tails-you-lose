@@ -483,6 +483,15 @@ function renderFindings(copy) {
         { aria: 'Bias quotient with and without a financial advisor persona', labelA: 'No persona', labelB: 'Financial advisor persona' }),
       legend: `<span><i class="lg-a"></i>No persona</span><span><i class="lg-b"></i>"CFA-certified advisor" persona</span>`,
     },
+    {
+      chart: (() => {
+        const acq = DATA.acquiescence_x50 || {}
+        const data = models.filter(m => acq[m]?.classic_fast != null && acq[m]?.novel_fast != null)
+          .map(m => ({ m, a: acq[m].classic_fast, b: acq[m].novel_fast }))
+        return dumbbell(data, { min: 0, max: 1, fmt: pct, axis: [0, 0.25, 0.5, 0.75, 1], labelA: 'Coin flip', labelB: 'Brokerage trade' })
+      })(),
+      legend: `<span><i class="lg-a"></i>Coin flip</span><span><i class="lg-b"></i>Brokerage trade</span><span>Share accepting: risk $100 to win $50 (fast answers)</span>`,
+    },
   ]
   root.innerHTML = F.map((f, i) => `
     <article class="finding">
@@ -535,7 +544,8 @@ function renderMatch() {
 
 /* ================================================================ boot */
 export async function initStudy(copy) {
-  const res = await fetch('data/summary.json?v=' + (copy.v || 1))
+  // resolved against this module's own URL, so the data loads whether the scripts are served locally or from a CDN
+  const res = await fetch(new URL('data/summary.json?v=' + (copy.v || 1), import.meta.url))
   DATA = await res.json()
   document.querySelectorAll('[data-count="models"]').forEach(el => el.textContent = DATA.models.length)
   document.querySelectorAll('[data-count="trials"]').forEach(el => el.textContent = DATA.n_trials.toLocaleString('en-US'))

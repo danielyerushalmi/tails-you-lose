@@ -242,7 +242,8 @@ if __name__ == "__main__":
     per_exp = {}
     for name, a, b in [("fast_vs_deliberate", ("classic", "fast", "none"), ("classic", "deliberate", "none")),
                        ("fast_vs_deliberate_novel", ("novel", "fast", "none"), ("novel", "deliberate", "none")),
-                       ("textbook_vs_novel", ("classic", "fast", "none"), ("novel", "fast", "none"))]:
+                       ("textbook_vs_novel", ("classic", "fast", "none"), ("novel", "fast", "none")),
+                       ("none_vs_advisor", ("novel", "fast", "none"), ("novel", "fast", "advisor"))]:
         for e in EXPS:
             def g(model, sp):
                 sub = res[(res.model == model) & (res.exp == e) & (res.surface == sp[0]) & (res["mode"] == sp[1]) & (res.persona == sp[2])]
@@ -251,13 +252,27 @@ if __name__ == "__main__":
             ok = ~(np.isnan(va) | np.isnan(vb))
             per_exp.setdefault(name, {})[e] = {"mean_a": float(np.nanmean(va[ok])) if ok.any() else None,
                                                "mean_b": float(np.nanmean(vb[ok])) if ok.any() else None, "n": int(ok.sum())}
+    # reasoning checks (thinks-first answers): do the written reasons match the choice pattern?
+    import re
+    rc = {}
+    d = good[(good.exp == "disposition") & (good["mode"] == "deliberate") & good.reasoning.notna()]
+    tax = d[d.reasoning.str.contains("tax", case=False)]
+    rc["disp_n"], rc["disp_tax"], rc["disp_tax_loser"] = int(len(d)), int(len(tax)), int((tax.answer == "loser").sum())
+    a_ = good[(good.exp == "anchoring") & (good["mode"] == "deliberate") & (good.surface == "novel") & (good.cond != "none") & good.reasoning.notna()].copy()
+    a_["calc"] = a_.reasoning.str.contains(r"2\.40?\b", regex=True) & a_.reasoning.str.contains(r"12|25|P/?E|times", regex=True)
+    a_["est"] = pd.to_numeric(a_.estimate, errors="coerce")
+    a_["fair"] = a_.est.between(28, 61)
+    rc["anch_n"], rc["anch_calc"] = int(len(a_)), int(a_.calc.sum())
+    rc["anch_calc_fair"] = float(a_[a_.calc].fair.mean()) if a_.calc.any() else None
+    rc["anch_nocalc_fair"] = float(a_[~a_.calc].fair.mean()) if (~a_.calc).any() else None
     summary = {
         "human": HUMAN, "labels": LABELS, "experiments": EXPS,
-        "n_trials": int(len(good)), "n_errors": int(df.error.notna().sum()),
+        "n_trials": int((good.surface != "friend").sum()), "n_friend_trials": int((good.surface == "friend").sum()),
+        "n_errors": int(df[df.surface != "friend"].error.notna().sum()),
         "models": sorted(good.model.unique().tolist()),
         "position_bias_first_option": clean(position_bias(good)),
         "results": [clean(r) for r in res.to_dict("records")],
-        "acquiescence_x50": clean(acq), "tests": clean(tests), "per_exp_tests": clean(per_exp),
+        "acquiescence_x50": clean(acq), "reasoning_checks": clean(rc), "tests": clean(tests), "per_exp_tests": clean(per_exp),
     }
     with open(out, "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=1)

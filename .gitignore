@@ -12,3 +12,4 @@ run_all.sh.bak
 .claude/
 ruvector.db
 FOR_DANIEL.md
+deploy/

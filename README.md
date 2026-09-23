@@ -2,11 +2,20 @@
 
 **Do AI language models inherit human money biases?** An original study by Daniel Yerushalmi.
 
-Ten open-weight language models (0.6 to 14 billion parameters, from Alibaba, Meta, Mistral, Google and Microsoft) took seven classic behavioral-finance experiments: the framing effect, loss aversion, anchoring, the sunk-cost fallacy, the disposition effect, mental accounting and the certainty effect. That came to 31,500 independent decisions, all run locally on one consumer GPU for $0 in API fees.
+Ten open-weight language models (0.6 to 14 billion parameters, from Alibaba, Meta, Mistral, Google and Microsoft) took seven classic behavioral-finance experiments: the framing effect, loss aversion, anchoring, the sunk-cost fallacy, the disposition effect, mental accounting and the certainty effect. That came to 31,500 independent decisions (31,494 usable), plus 8,100 in an exploratory variant, all run locally on one consumer GPU for $0 in API fees.
 
 - **Interactive site:** take the same tests and see which model decides most like you (`site/`)
 - **Paper:** `paper/paper.pdf`
 - **Raw data:** every trial, with the model's raw output, in `data/trials.jsonl`
+
+## Key findings
+
+- **The average hides the story.** On new financial problems the models averaged a bias quotient of 0.59 (1.00 = as biased as people). Eight of ten never fell for the sunk-cost fallacy, and most sold the losing stock (the tax-smart move).
+- **Anchoring is worse than in people.** Six of ten models were more anchored than humans by a number they were told was random when valuing a stock. Having the model write out the P/E arithmetic first fixed most of it.
+- **Call it a trade, not a gamble, and they take the losing bet.** The same stake-$100-to-win-$50 bet was accepted 35% of the time as a coin flip and 81% as a brokerage trade. (Framing it as a friend's business, our first hypothesis, adds little: 89%.)
+- **A "disciplined financial advisor" persona made models significantly more biased** (0.59 to 0.85; 8 of 10 models worse; Wilcoxon p = 0.01), mostly by turning them too cautious.
+- **Thinking first trades one bias for another.** It cut anchoring (1.23 to 0.49) but strengthened the certainty effect (0.11 to 1.04).
+- **Famous test problems are a poor guide** to behavior on new problems with the same structure, in both directions.
 
 ## Design in one paragraph
 

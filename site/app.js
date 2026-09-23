@@ -1,5 +1,5 @@
-import { initStudy } from './study.js?v=3'
-import { COPY } from './copy.js?v=1'
+import { initStudy } from './study.js?v=5'
+import { COPY } from './copy.js?v=3'
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
 const hasGsap = typeof window.gsap !== 'undefined'
